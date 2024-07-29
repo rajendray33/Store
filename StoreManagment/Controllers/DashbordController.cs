@@ -53,11 +53,10 @@ namespace StoreManagment.Controllers
         }
 
 
-        //Add Product Category
+        //Add Product Category method
         [HttpGet("_AddProduct")]
         public IActionResult _AddProduct()
         {
-
             return PartialView();
         }
 
