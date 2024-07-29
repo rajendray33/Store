@@ -73,7 +73,7 @@ namespace StoreManagment.Controllers
             return PartialView(viewModel);
         }
 
-        //Add Caategory Post Method
+        //Add Caategory Post
         [HttpPost("_AddProduct")]
         public IActionResult _AddProduct([FromBody] AddProductVM vmodel)
         {
