@@ -1,0 +1,32 @@
+﻿@model StoreManagment.ViewModel.ProductListViewModel
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card AddCard">
+                <div class="card-body">
+                    <div id="ProductAddBox">
+                        <h5 class="card-title">Add Category</h5>
+                        <!-- Horizontal Form -->
+                        <form>
+                            <div class="row mb-3">
+                                <label for="CategoryName" class="col-sm-2 col-form-label">Product Name</label>
+                                <div class="col-sm-6">
+                                    <input asp-for="NewProduct.Product_Category" class="form-control" id="CategoryName" placeholder="Product Name">
+                                    <span asp-validation-for="NewProduct.Product_Category" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3" style="margin:10px 0px 0px 138px;">
+                                    <button type="button" class="btn btn-success" id="AddProductBtn">Add Product</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                  <div id="ProductListContainer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="EditCategoryPopup"></div>

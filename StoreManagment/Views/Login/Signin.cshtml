@@ -1,0 +1,40 @@
+﻿@model StoreManagment.ViewModel.LoginVM
+@{
+    Layout = "~/Views/Shared/_Loginlayout.cshtml";
+    ViewData["Title"] = "Signin";
+}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Design by foolishdeveloper.com -->
+    <title>Glassmorphism login Form Tutorial in html css</title>
+
+</head>
+<body class="loginbody">
+    <div class="background">
+        <div class="shape brw"></div>
+        <div class="shape brw"></div>
+    </div>
+
+    <div class="loginform brw">
+        <h3>Login Here</h3>
+
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" type="text" id="Uemail" />
+
+        <label asp-for="Password">Password</label>
+        <input asp-for="Password" type="password" id="Upassword" />
+
+        <button class="Buttonlogin" id="LoginBtn">Login</button>
+        <div class="social">
+            <div class="go" id="AddNewBtn">Registration</div>
+            <div class="fb" id="ForgetPassword">Foregt</div>
+        </div>
+    </div>
+
+    <div id="AddNewPopUp"></div>
+</body>
+</html>

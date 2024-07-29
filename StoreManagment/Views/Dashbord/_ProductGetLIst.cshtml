@@ -1,0 +1,36 @@
+﻿@model StoreManagment.ViewModel.ProductListViewModel
+
+
+<div style="margin:25px;">
+    <h4 style="color:forestgreen;">Product Category List</h4>
+    <hr />
+    <table class="table datatable">
+        <thead>
+            <tr>
+                <th>P_Id</th>
+                <th>Product Name</th>
+                <th>Add Date</th>
+                <th>Update Date</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ProductsList)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.P_Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Product_Category)</td>
+                    <td>@item.CreateDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.UpdateDate?.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button class="btn btn-outline-danger" id="Removerecored" data-id="@item.P_Id">Delete</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success" id="EditProductCategory" data-id="@item.P_Id">Edit</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
