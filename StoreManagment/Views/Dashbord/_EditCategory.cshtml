@@ -10,14 +10,15 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <label asp-for="Product_Category" class="col-sm-2 col-form-label">Category</label>
+                    <input asp-for="P_Id" type="hidden" class="form-control" id="UP_id"/>
+                    <label asp-for="Product_Category" class="col-sm-2 col-form-label" >Category</label>
                     <div class="col-sm-10">
-                        <input asp-for="Product_Category" class="form-control" />
+                        <input asp-for="Product_Category" class="form-control" id="UCategory" />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success">Update</button>
+                <button type="button" class="btn btn-outline-success" id="BtnUpdate" data-id="P_Id">Update</button>
                 <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

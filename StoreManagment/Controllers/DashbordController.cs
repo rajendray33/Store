@@ -7,6 +7,7 @@ using StoreManagment.ViewModel;
 using StoreManagment.Repository;
 using static StoreManagment.Models.Common;
 using StoreManagment.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace StoreManagment.Controllers
 {
@@ -125,6 +126,41 @@ namespace StoreManagment.Controllers
             }
             return PartialView();
         }
+
+
+        [HttpPost("_EditCategory")]
+        public IActionResult _EditCategory([FromBody] AddProductVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var EditModel = new AddProduct
+                {
+                    Product_Category = model.Product_Category,
+                    P_Id=model.P_Id
+                };
+                var Updatecategory = repository.UpdatreCategory(EditModel);
+
+                if (Updatecategory == 0)
+                {
+                    return Json(new { success = false });
+                }
+                else
+                {
+                    return Json(new { success = true });
+                }
+            }
+
+            else
+            {
+                return PartialView();
+            }
+
+
+        }
+
+
+
+
     }
 }
 

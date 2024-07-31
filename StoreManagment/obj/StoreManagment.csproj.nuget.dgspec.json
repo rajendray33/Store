@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "E:\\MVCProjects\\StoreManagment\\StoreManagment\\StoreManagment.csproj": {}
+    "E:\\Raj Yadav\\Store\\StoreManagment\\StoreManagment.csproj": {}
   },
   "projects": {
-    "E:\\MVCProjects\\StoreManagment\\StoreManagment\\StoreManagment.csproj": {
+    "E:\\Raj Yadav\\Store\\StoreManagment\\StoreManagment.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MVCProjects\\StoreManagment\\StoreManagment\\StoreManagment.csproj",
+        "projectUniqueName": "E:\\Raj Yadav\\Store\\StoreManagment\\StoreManagment.csproj",
         "projectName": "StoreManagment",
-        "projectPath": "E:\\MVCProjects\\StoreManagment\\StoreManagment\\StoreManagment.csproj",
-        "packagesPath": "C:\\Users\\shyam\\.nuget\\packages\\",
-        "outputPath": "E:\\MVCProjects\\StoreManagment\\StoreManagment\\obj\\",
+        "projectPath": "E:\\Raj Yadav\\Store\\StoreManagment\\StoreManagment.csproj",
+        "packagesPath": "C:\\Users\\nan\\.nuget\\packages\\",
+        "outputPath": "E:\\Raj Yadav\\Store\\StoreManagment\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\shyam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nan\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

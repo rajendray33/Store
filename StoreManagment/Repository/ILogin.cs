@@ -17,8 +17,10 @@ namespace StoreManagment.Repository
         //Add Product Category
         int? AddProduct(AddProduct model);
 
-        //Category Update
+        // Get Category Update
         AddProductVM? EditCategory(int id);
 
+        // Update post Category
+        int? UpdatreCategory(AddProduct model);
     }
 }

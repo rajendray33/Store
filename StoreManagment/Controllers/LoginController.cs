@@ -77,11 +77,6 @@ namespace StoreManagment.Controllers
                         // Sign in user
                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal).Wait();
 
-                        // Optionally set session if needed
-                        //HttpContext.Session.SetString("LoginSession", user.Email);
-                        //HttpContext.Session.SetString("username", user.Name);
-
-                        // Return success JSON response
                         return Json(new { success = true });
                     }
                 }

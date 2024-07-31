@@ -83,7 +83,7 @@
                         $('#Unumber').css("border", "2px solid rgb(251, 0, 0)")
                     } else {
                         $('#myModal').modal('toggle');
-                        window.location.href = "/LoginHome/signin", 1000;
+                        window.location.href = "/LoginHome/signin", 2000;
                         alertify.success("Submitted successfully", 2000);
                     }
                 },
@@ -95,7 +95,7 @@
     });
 
 
-    $(document).on('click', '#btnn', function () {
+    $(document).on('click', '#ForgetPassword', function () {
         debugger;
         alertify.success('okok')
     })
@@ -160,7 +160,7 @@
         $.ajax({
             type: 'GET',
             url: '/Dashbord/_EditCategory',
-            data: { Pid: id }, 
+            data: { Pid: id },
             success: function (responce) {
                 $('#EditCategoryPopup').html(responce);
                 $('#myModalEdit').modal('toggle');
@@ -168,7 +168,50 @@
             },
 
         })
-    })
+    });
+
+    //Category Update Post Ajax
+    $(document).on('click', '#BtnUpdate', function (event) {
+        debugger;
+        if (EditProductvalidatoin()) {
+
+            var productname = $('#UCategory').val();
+            var pid = $('#UP_id').val();
+            $.ajax({
+                type: 'POST',
+                url: '/Dashbord/_EditCategory',
+                contentType: 'application/json',
+                data: JSON.stringify({ Product_Category: productname, P_Id: pid }),
+                success: function (response) {
+                    if (response.success) {
+                        GetProductList();
+                        $('#myModalEdit').modal('toggle');
+                        alertify.success('Category Updated Successfully')
+                    }
+                    else {
+                        alertify.error('Category Allready Exit')
+                        $('#UCategory').css("border", "2px solid rgb(255, 0, 0)");
+
+                    };
+                },
+                error: function () {
+                    alert('There was an error submitting the form.');
+                }
+            });
+        }
+
+    });
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
@@ -202,6 +245,33 @@ function GetProductList() {
 
     })
 }
+
+
+//Add Product Caegory Validaton
+function EditProductvalidatoin() {
+    let isValid = true;
+    debugger;
+    // Reset previous error messages and borders
+    $(".error").remove();
+    $("input").css("border", "");
+
+    // Validate Product Name
+    const productName = $("#UCategory").val();
+    if (productName.length < 3 || productName.length > 50) {
+        $("#UCategory").css("border", "2px solid rgb(255, 0, 0)");
+        alertify.error('Product Name must be between 3 and 50 characters long');
+        isValid = false;
+    } else {
+        $("#UCategory").css("border", "2px solid rgb(122, 245, 71)");
+    }
+
+    return isValid;
+}
+
+
+
+
+
 //Add Product Caegory Validaton
 function AddProductvalidatoin() {
     let isValid = true;

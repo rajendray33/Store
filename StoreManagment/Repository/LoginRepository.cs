@@ -78,6 +78,8 @@ namespace StoreManagment.Repository
         public List<AddProductVM> GetProductList()
         {
             var products = DB.Tbl_Add_Product.ToList();
+
+
             var productVMs = products.Select(p => new AddProductVM
             {
                 P_Id = p.P_Id,
@@ -124,9 +126,9 @@ namespace StoreManagment.Repository
             {
                 var addProductVM = new AddProductVM
                 {
-                    P_Id =CheckCatetogyExit.P_Id,
+                    P_Id = CheckCatetogyExit.P_Id,
                     Product_Category = CheckCatetogyExit.Product_Category
-                 
+
                 };
 
                 return addProductVM;
@@ -136,5 +138,41 @@ namespace StoreManagment.Repository
                 return null;
             }
         }
-    }
+
+        public int? UpdatreCategory(AddProduct model)
+        {
+            var prodct = DB.Tbl_Add_Product.Where(x => x.Product_Category == model.Product_Category).Any();
+
+
+            if (prodct == true)
+            {
+                return 0;
+            }
+            else
+            {
+                var adproduct = DB.Tbl_Add_Product.Where(x => x.P_Id == model.P_Id).FirstOrDefault();
+                adproduct.Product_Category = model.Product_Category;
+                adproduct.UpdateDate = DateTime.Now;
+                DB.SaveChanges();
+                return 1;
+            }
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+    };
+
+
 }
