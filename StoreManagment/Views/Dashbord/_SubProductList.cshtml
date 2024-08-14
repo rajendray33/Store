@@ -1,0 +1,42 @@
+﻿@model IEnumerable<StoreManagment.ViewModel.Sub_ProductVM>
+
+<div style="margin:25px;">
+    <h4 style="color:forestgreen;">Sub Product List</h4>
+    <hr />
+    <table class="table" id="SubProductTable">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Sub_Product_Name</th>
+                <th>Category</th>
+                <th>Added Date</th>
+                <th>Updated Date</th>
+                <th>Delete</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int recordNumber = 1; // Count Recored Number
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@recordNumber</td>
+                    @Html.HiddenFor(modelItem => item.Sub_P_Id)
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.Sub_Product_Name)</td>
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.ProductCategory)</td>
+                    <td>@item.CreatedDate?.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>@item.UpdatedDate?.ToString("dd/MM/yyyy hh:mm tt")</td>
+                    <td>
+                        <button class="btn btn-outline-danger" id="DeleteSubProduct" data-id="@item.Sub_P_Id"><i class="bi bi-trash3"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success" id="EditSubProduct" data-id="@item.Sub_P_Id"><i class="bi bi-pencil"></i></button>
+                    </td>
+                </tr>
+                recordNumber++;
+            }
+        </tbody>
+    </table>
+</div>

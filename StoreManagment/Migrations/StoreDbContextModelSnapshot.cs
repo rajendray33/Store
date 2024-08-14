@@ -22,6 +22,91 @@ namespace StoreManagment.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("StoreManagment.Models.Add_ItemModel", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"), 1L, 1);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTime?>("Item_Expiry_Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Item_Expiry_Date");
+
+                    b.Property<string>("Item_Name")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Item_Name");
+
+                    b.Property<int?>("Item_Price")
+                        .HasColumnType("int")
+                        .HasColumnName("Item_Price");
+
+                    b.Property<int?>("Item_Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("Item_Quantity");
+
+                    b.Property<int?>("Item_Selling_Price")
+                        .HasColumnType("int")
+                        .HasColumnName("Item_Selling_Price");
+
+                    b.Property<string>("Item_SerialNumber")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Item_SerialNumber");
+
+                    b.Property<int?>("P_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("S_P_Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("ItemId");
+
+                    b.HasIndex("P_Id");
+
+                    b.HasIndex("S_P_Id");
+
+                    b.ToTable("Tbl_AddItem");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.Add_Sub_ProductModel", b =>
+                {
+                    b.Property<int>("Sub_P_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Sub_P_Id"), 1L, 1);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<int>("P_Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Sub_Product_Name")
+                        .HasColumnType("varchar(150)")
+                        .HasColumnName("Sub_Product_Name");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Sub_P_Id");
+
+                    b.HasIndex("P_Id");
+
+                    b.ToTable("Tbl_Add_SubProduct");
+                });
+
             modelBuilder.Entity("StoreManagment.Models.AddProduct", b =>
                 {
                     b.Property<int>("P_Id")
@@ -32,7 +117,7 @@ namespace StoreManagment.Migrations
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime")
-                        .HasColumnName("CreateDate");
+                        .HasColumnName("CreateDated");
 
                     b.Property<string>("Product_Category")
                         .HasColumnType("varchar(150)")
@@ -40,7 +125,7 @@ namespace StoreManagment.Migrations
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime")
-                        .HasColumnName("UpdateDate");
+                        .HasColumnName("UpdatedDate");
 
                     b.HasKey("P_Id");
 
@@ -85,6 +170,46 @@ namespace StoreManagment.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Tbl_Registration");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.Add_ItemModel", b =>
+                {
+                    b.HasOne("StoreManagment.Models.AddProduct", "AddProduct")
+                        .WithMany("AddItems")
+                        .HasForeignKey("P_Id");
+
+                    b.HasOne("StoreManagment.Models.Add_Sub_ProductModel", "Add_Sub_ProductModel")
+                        .WithMany("AddItems")
+                        .HasForeignKey("S_P_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddProduct");
+
+                    b.Navigation("Add_Sub_ProductModel");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.Add_Sub_ProductModel", b =>
+                {
+                    b.HasOne("StoreManagment.Models.AddProduct", "AddProduct")
+                        .WithMany("SubProducts")
+                        .HasForeignKey("P_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddProduct");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.Add_Sub_ProductModel", b =>
+                {
+                    b.Navigation("AddItems");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.AddProduct", b =>
+                {
+                    b.Navigation("AddItems");
+
+                    b.Navigation("SubProducts");
                 });
 #pragma warning restore 612, 618
         }

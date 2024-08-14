@@ -12,5 +12,7 @@ namespace StoreManagment.Models
 
         public DbSet<RegistrationModel> Tbl_Registration { get; set; } = null!;
         public DbSet<AddProduct> Tbl_Add_Product { get; set; } = null!;
+        public DbSet<Add_Sub_ProductModel> Tbl_Add_SubProduct { get; set; } = null!;
+        public DbSet<Add_ItemModel> Tbl_AddItem { get; set; } = null!;
     }
 }

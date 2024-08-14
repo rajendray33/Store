@@ -8,6 +8,10 @@ using StoreManagment.Repository;
 using static StoreManagment.Models.Common;
 using StoreManagment.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using StoreManagment.Migrations;
 
 namespace StoreManagment.Controllers
 {
@@ -66,12 +70,8 @@ namespace StoreManagment.Controllers
         [HttpGet("_ProductGetLIst")]
         public IActionResult _ProductGetLIst()
         {
-            var viewModel = new ProductListViewModel
-            {
-                ProductsList = repository.GetProductList(),
-                NewProduct = new AddProductVM()
-            };
-            return PartialView(viewModel);
+            var categoryList = repository.GetProductList();
+            return PartialView(categoryList);
         }
 
         //Add Caategory Post
@@ -127,7 +127,7 @@ namespace StoreManagment.Controllers
             return PartialView();
         }
 
-
+        //category Edit Update method
         [HttpPost("_EditCategory")]
         public IActionResult _EditCategory([FromBody] AddProductVM model)
         {
@@ -136,7 +136,7 @@ namespace StoreManagment.Controllers
                 var EditModel = new AddProduct
                 {
                     Product_Category = model.Product_Category,
-                    P_Id=model.P_Id
+                    P_Id = model.P_Id
                 };
                 var Updatecategory = repository.UpdatreCategory(EditModel);
 
@@ -158,9 +158,255 @@ namespace StoreManagment.Controllers
 
         }
 
+        //Delete Category
+        [HttpPost("_DeleteCategory")]
+        public IActionResult _DeleteCategory(int Cid)
+        {
+            if (Cid > 0)
+            {
+                var deletecategory = repository.DeleteCategory(Cid);
+
+                if (deletecategory == true)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            else
+            {
+                return NotFound(new { success = false, message = "Category not found" });
+            }
+        }
 
 
 
+        //Sub Product popup And Category List
+        [HttpGet("_AddSubProduct")]
+        public IActionResult _AddSubProduct()
+        {
+            var categoriesList = repository.GetCategoryList();
+
+            // Creating a single Sub_ProductVM object
+            var viewModel = new Sub_ProductVM
+            {
+                categoryList = categoriesList.Select(c => new SelectListItem
+                {
+                    Value = c.Sub_P_Id.ToString(),
+                    Text = c.ProductCategory
+                }).ToList()
+            };
+
+            return PartialView(viewModel);
+        }
+
+        //Sub Product Add Post
+        [HttpPost("_AddSubProduct")]
+        public IActionResult _AddSubProduct([FromBody] Sub_ProductVM Vmodel)
+        {
+            if (ModelState.IsValid)
+            {
+                Add_Sub_ProductModel mdl = new Add_Sub_ProductModel()
+                {
+                    Sub_Product_Name = Vmodel.Sub_Product_Name,
+                    P_Id = Vmodel.P_Id
+                };
+                //Repository method
+                var Addproductname = repository.Add_SubProduct(mdl);
+
+
+
+                if (Addproductname == false)
+                {
+                    return Json(new { success = false });
+                }
+                else
+                {
+                    return Json(new { success = true });
+                }
+            }
+
+            return Json(new { success = false });
+
+
+
+        }
+
+
+        //Get Sub Product List 
+        [HttpGet("_SubProductList")]
+        public IActionResult _SubProductList()
+        {
+            var SubProductList = repository.GetSubProductList();
+            return PartialView(SubProductList);
+        }
+
+        //Edit SubProduct Get  And Category Dropdown List
+        [HttpGet("_EditSubProduct")]
+        public IActionResult _EditSubProduct(int SubPId)
+        {
+            var EditSubProduct = repository.EditSubproduct(SubPId);
+            if (EditSubProduct == null)
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return PartialView(EditSubProduct);
+            }
+
+        }
+
+        //Sub Product Update  
+        [HttpPost("_EditSubProduct")]
+        public IActionResult _EditSubProduct([FromBody] Sub_ProductVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var EditModel = new Add_Sub_ProductModel
+                {
+                    Sub_Product_Name = model.Sub_Product_Name,
+                    Sub_P_Id = model.Sub_P_Id,
+                    P_Id = model.P_Id    //reparsent to SubProduct Category
+                };
+                var UpdateSubProduct = repository.UpdateSubProduct(EditModel);
+
+                if (UpdateSubProduct == false)
+                {
+                    return Json(new { success = false });
+                }
+                else
+                {
+                    return Json(new { success = true });
+                }
+            }
+
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        //Delete Sub Product Method 
+        [HttpPost("_DeleteSubProduct")]
+        public IActionResult _DeleteSubProduct(int SpId)
+        {
+            if (SpId > 0)
+            {
+                var deletecategory = repository.DeleteSubProduct(SpId);
+
+                if (deletecategory == true)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            else
+            {
+                return NotFound(new { success = false, message = "Category not found" });
+            }
+        }
+
+
+
+        //Add Stock Item Get Method
+        [HttpGet("_AddStockIteams")]
+        public IActionResult _AddStockIteams()
+        {
+            return PartialView();
+
+        }
+
+        //Add Stock Item Post
+        [HttpPost("_AddStockIteams")]
+        public IActionResult _AddStockIteams([FromBody] Add_ItemVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                Add_ItemModel mdl = new Add_ItemModel()
+                {
+                    P_Id = model.P_Id,
+                    S_P_Id = model.S_P_Id,
+                    Item_Name = model.Item_Name,
+                    Item_SerialNumber = model.Item_SerialNumber,
+                    Item_Quantity = model.Item_Quantity,
+                    Item_Price = model.Item_Price,
+                    Item_Selling_Price = model.Item_Selling_Price,
+                    Item_Expiry_Date = model.Item_Expiry_Date,
+
+                };
+                var item = repository.AddItem(mdl);
+                if (item == true)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+        }
+
+
+        //Item Stock Partial view 
+        [HttpGet("_StockDetail")]
+        public IActionResult _StockDetail()
+        {
+            return PartialView();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Get Caategory For Item Json Action
+        [HttpGet("_SubproductListItm")]
+        public JsonResult _SubproductListItm(int CategoryId)
+        {
+            var category = repository.GetSubDDl(CategoryId); // Fetch data from repository
+            return new JsonResult(category); // Return data as JSON
+        }
+
+        [HttpGet("DDlCategory")]
+        public JsonResult DDlCategory()
+        {
+            var getddlcategory = repository.DDLGetAllCategories();
+            return new JsonResult(getddlcategory);
+        }
     }
 }
 

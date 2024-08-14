@@ -7,9 +7,8 @@ namespace StoreManagment.ViewModel
         public int P_Id { get; set; }
         [Required]
         public string? Product_Category { get; set; }
-
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
-        public List<AddProductVM>? ProductList { get; set; }
+
     }
 }

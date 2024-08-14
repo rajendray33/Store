@@ -1,0 +1,39 @@
+﻿@model StoreManagment.ViewModel.Sub_ProductVM
+
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="box bg-light p-3" style="margin:10px;padding:15px;">
+                                <div class="row mb-3">
+                                    <div class="col-lg-6">
+                                        <label for="category">Category</label>
+                                        <select asp-for="ProductCategory" asp-items="Model.categoryList" class="form-control" id="SelectCate">
+                                            <option> --Select Category--</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label for="Sub_Product_Name">Sub Product Name</label>
+                                        <input asp-for="Sub_Product_Name" type="text" class="form-control" id="SubPN" placeholder="Sub Product Name" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <button type="button" class="btn btn-success" id="AddSubProductBtn">Add Sub Product</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="SubProductListContainer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="EditSubProductPopup"></div>
+
