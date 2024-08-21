@@ -496,6 +496,7 @@ E:\Raj Yadav\Store\StoreManagment\obj\Debug\net6.0\StoreManagment.genruntimeconf
 E:\Raj Yadav\Store\StoreManagment\obj\Debug\net6.0\ref\StoreManagment.dll
 E:\Store\StoreManagment\bin\Debug\net6.0\appsettings.Development.json
 E:\Store\StoreManagment\bin\Debug\net6.0\appsettings.json
+E:\Store\StoreManagment\bin\Debug\net6.0\libman.json
 E:\Store\StoreManagment\bin\Debug\net6.0\StoreManagment.staticwebassets.runtime.json
 E:\Store\StoreManagment\bin\Debug\net6.0\StoreManagment.exe
 E:\Store\StoreManagment\bin\Debug\net6.0\StoreManagment.deps.json
@@ -742,4 +743,3 @@ E:\Store\StoreManagment\obj\Debug\net6.0\refint\StoreManagment.dll
 E:\Store\StoreManagment\obj\Debug\net6.0\StoreManagment.pdb
 E:\Store\StoreManagment\obj\Debug\net6.0\StoreManagment.genruntimeconfig.cache
 E:\Store\StoreManagment\obj\Debug\net6.0\ref\StoreManagment.dll
-E:\Store\StoreManagment\bin\Debug\net6.0\libman.json

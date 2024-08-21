@@ -25,11 +25,12 @@ namespace StoreManagment.ViewModel
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-
+     
 
         // Foreign Key for Sub Product
         public int S_P_Id { get; set; }
         public List<SelectListItem>? SubProductList { get; set; }
+        public string? SubProduct { get; set; }
         public Add_Sub_ProductModel? Add_Sub_ProductModel { get; set; }
 
 

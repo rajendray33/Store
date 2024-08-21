@@ -1,0 +1,148 @@
+﻿@model StoreManagment.ViewModel.Add_ItemVM
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2">
+            <button type="button" class="btn btn-success" id="AddItemPopUp" data-bs-toggle="modal" data-bs-target="#ItemAdd">
+                Add Stock Item
+            </button>
+        </div>
+
+        <div class="col-lg-2">
+            <button type="button" class="btn btn-success" id="SearchItmPopUp" data-bs-toggle="modal" data-bs-target="#SearchItm">
+                Search Item
+            </button>
+        </div>
+        <div class="col-lg-6">
+        </div>
+    </div>
+    @*
+    @*Stock Item Add Modep Popup *@
+
+    <div class="modal fade" id="ItemAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <!-- Use modal-lg or modal-xl here -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Add Stock Item</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="box bg-light p-3">
+                                <div class="row mb-3">
+                                    <div class="col-lg-6">
+                                        @*Category Colum*@
+                                        <label asp-for="P_Id">Category</label>
+                                        <select class="form-control" id="ItmSelectCate">
+                                            <option>--Select Category--</option>>
+                                        </select>
+                                    </div>
+
+                                    @*Sub Product Colum*@
+                                    <div class="col-lg-6">
+                                        <label asp-for="S_P_Id">Sub Product</label>
+                                        <select class="form-control" id="ItmSelectSub">
+                                            <option>--Select Sub Product--</option>>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_Name">Item Name</label>
+                                        <input asp-for="Item_Name" type="text" class="form-control" id="ItmName" placeholder="Item Name" />
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_SerialNumber">Item Serial Number</label>
+                                        <input asp-for="Item_SerialNumber" type="text" class="form-control" id="ItmSrNumber" placeholder="Item Serial Number" />
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_Quantity">Item Quntity</label>
+                                        <input asp-for="Item_Quantity" type="number" class="form-control" id="ItmQuntity" placeholder="Item Quntity" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_Price">Item Price</label>
+                                        <input asp-for="Item_Price" type="number" class="form-control" id="ItmPrice" placeholder="Item Price" />
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_Selling_Price">Item Selling Price</label>
+                                        <input asp-for="Item_Selling_Price" type="number" class="form-control" id="ItmSellingPrice" placeholder="Item Selling Price" />
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <label asp-for="Item_Expiry_Date">Expiry Date</label>
+                                        <input asp-for="Item_Expiry_Date" type="date" class="form-control" id="ItmExpiryDate" placeholder="Expiry Date" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-outline-success" id="AddItemBtn">Add Item</button>
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+                        </div>
+                        <div class="col-lg-4">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Searcj Item PopUp*@
+
+<div class="modal fade" id="SearchItm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Search Item</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <select class="form-control" id="ItmSelectCate">
+                            <option>--Select Category--</option>>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <select class="form-control" id="ItmSelectSub">
+                            <option>--Select Sub Product--</option>>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" id="searchInput" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div></div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" id="BtnUpdate" data-id="P_Id">Update</button>
+                <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

@@ -20,12 +20,12 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcSG9tZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Store/StoreManagment/Views/Dashbord/_AddProduct.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0FkZFByb2R1Y3QuY3NodG1s
+[E:/Store/StoreManagment/Views/Dashbord/_AddItemIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0FkZEl0ZW1JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/Store/StoreManagment/Views/Dashbord/_AddStockIteams.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0FkZFN0b2NrSXRlYW1zLmNzaHRtbA==
+[E:/Store/StoreManagment/Views/Dashbord/_AddProduct.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0FkZFByb2R1Y3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Store/StoreManagment/Views/Dashbord/_AddSubProduct.cshtml]
@@ -40,8 +40,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0VkaXRTdWJQcm9kdWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/Store/StoreManagment/Views/Dashbord/_GetStockList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX0dldFN0b2NrTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/Store/StoreManagment/Views/Dashbord/_ProductGetLIst.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX1Byb2R1Y3RHZXRMSXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/Store/StoreManagment/Views/Dashbord/_SearchItm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvcmRcX1NlYXJjaEl0bS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/Store/StoreManagment/Views/Dashbord/_StockDetail.cshtml]

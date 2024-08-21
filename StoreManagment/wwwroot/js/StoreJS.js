@@ -368,20 +368,84 @@
 
 
 
-    //Stock Iteam Add  Popup Ajax
+
+
+
+
+
+
+    //Add Item Index 
     $(document).on('click', '#AddIteamPopup', function () {
         debugger;
         $.ajax({
             type: 'Get',
-            url: '/Dashbord/_AddStockIteams',
+            url: '/Dashbord/_AddItemIndex',
             cache: false,
             success: function (responce) {
                 $('#AddCategoryPopup').html(responce);
-                DDlCategory();
+                //GetStocklist();
 
             },
         })
     });
+
+    //Add Item PopUp
+    $(document).on('click', '#AddItemPopUp', function () {
+        DDlCategory();
+    })
+
+    //DDl Sub Product Ajax On Category Chenge 
+    $(document).on('change', '#ItmSelectCate', function () {
+        var CategoryId = $(this).val();
+        debugger;
+        if (CategoryId > 0) {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashbord/_SubproductListItm',
+                data: { CategoryId: CategoryId },
+                cache: false,
+                success: function (response) {
+                    $('#ItmSelectSub').empty();
+                    $('#ItmSelectSub').append('<option value="">--Select Sub Product--</option>');
+
+                    if (response != null && response.length > 0) {
+                        $.each(response, function (index, item) {
+                            $('#ItmSelectSub').append('<option value="' + item.value + '">' + item.text + '</option>');
+                        });
+                    } else {
+                        $('#ItmSelectSub').append('<option value="">No Subcategories Found</option>'); // Optional: Message if no subcategories
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + error); // Error handling
+                }
+            });
+        }
+        else {
+            alertify.error("Please select a valid category.");
+        }
+    });
+
+
+
+    //Hide Show Itm Table
+
+    $(document).on('click', '#HideTbl', function () {
+        debugger;
+        $('#ItemTable').toggle();
+        var btntbltoggl = $('#HideTbl').text();
+        if (btntbltoggl == 'View Item Recored') {
+            $('#HideTbl').text('Hide Item Recored');
+        }
+        else {
+            $('#HideTbl').text('View Item Recored');
+        }
+
+
+    })
+
+
+
 
     //Add Item post Ajax
     $(document).on('click', '#AddItemBtn', function () {
@@ -419,40 +483,10 @@
         }
     })
 
-    //DDl Sub Product GEt Using ajax
-    $(document).on('change', '#ItmSelectCate', function () {
-        var CategoryId = $(this).val();
-        debugger;
-        if (CategoryId > 0) {
-            $.ajax({
-                type: 'GET',
-                url: '/Dashbord/_SubproductListItm',
-                data: { CategoryId: CategoryId },
-                cache: false,
-                success: function (response) {
-                    $('#ItmSelectSub').empty();
-                    $('#ItmSelectSub').append('<option value="">--Select Sub Product--</option>');
-
-                    if (response != null && response.length > 0) {
-                        $.each(response, function (index, item) {
-                            $('#ItmSelectSub').append('<option value="' + item.value + '">' + item.text + '</option>');
-                        });
-                    } else {
-                        $('#ItmSelectSub').append('<option value="">No Subcategories Found</option>'); // Optional: Message if no subcategories
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error: " + error); // Error handling
-                }
-            });
-        }
-        else {
-            alertify.error("Please select a valid category.");
-        }
-    });
 
 
 
+    //View Stock Detail
     $(document).on('click', '#ViewStockPopUp', function () {
         debugger;
         $.ajax({
@@ -467,9 +501,30 @@
         })
     })
 
-});
+    //Search Stock  Item
+    $(document).on('click', '#SearchItemBtn', function () {
+        debugger;
+        var userData = {
+            P_Id: $('#V_Category').val(),
+            Item_Name: $('#V_itmName').val(),
+        };
+
+        $.ajax({
+            type: 'POST', // Change to POST for sending data
+            url: '/Dashbord/_SearchItm',
+            data: JSON.stringify(userData), // Send data as JSON string
+            contentType: 'application/json', // Specify the content type
+            success: function (response) {
+                $('#ItmSearchResult').html(response);
+            },
+            error: function (error) {
+                console.log("Error: ", error);
+            }
+        });
+    });
 
 
+})
 
 
 
@@ -498,6 +553,23 @@ function DDlCategory() {
         }
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -548,7 +620,33 @@ function GetSubProductList() {
     })
 }
 
+//Stock Item List
+function GetStocklist() {
+    debugger;
+    $.ajax({
+        type: 'GET',
+        url: '/dashbord/_GetStockList',
+        cache: false,
+        success: function (response) {
+            $('#StockItmTbldata').html(response);
+        },
+        error: function (xhr, status, error) {
+            console.log('Error: ' + error);
+        }
+    });
+}
+
 //-----------------List Get Code Here--^^^^^^^----------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -677,7 +775,6 @@ function AddProductvalidatoin() {
     return isValid;
 }
 
-
 // Add Item Validation
 function Add_Item_Productvalidatoin() {
     let isValid = true;
@@ -700,7 +797,7 @@ function Add_Item_Productvalidatoin() {
 
     // Validate Sub Product
     const subProduct = $("#ItmSelectSub").val();
-    if (subProduct == "--Select Sub Product--") {
+    if (subProduct === "" || subProduct === "--Select Sub Product--") {
         $("#ItmSelectSub").css("border", "1.5px solid rgb(255, 0, 0)");
         alertify.error('Please select a sub product');
         isValid = false;
@@ -770,8 +867,6 @@ function Add_Item_Productvalidatoin() {
 
     return isValid;
 }
-
-
 
 //Validations Code Here
 //Login Validaton Funcation

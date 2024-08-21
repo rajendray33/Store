@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreManagment.Migrations;
 using StoreManagment.Models;
@@ -342,8 +343,82 @@ namespace StoreManagment.Repository
             }
         }
 
+        //Item Search 
+        //public Add_ItemModel? SearchItem(Add_ItemVM model)
+        //{
+        //    var checkItm = DB.Tbl_AddItem.Include(x => x.AddProduct).Where(x => x.P_Id == categoryId && x.Item_Name == item).FirstOrDefault();
+        //    if (checkItm != null)
+        //    {
+        //        return checkItm;
+        //    }
+        //    else
+        //    {
+        //        return null;
 
-       
+        //    }
+        //}
+        public List<Add_ItemVM> SearchItem(Add_ItemModel model)
+        {
+            var SubProductList = DB.Tbl_AddItem
+                .Include(x => x.AddProduct)
+                .Where(x => x.P_Id == model.P_Id && x.Item_Name == model.Item_Name)
+                .ToList();
+
+            var ItemData = SubProductList.Select(p => new Add_ItemVM
+            {
+                ItemId = p.ItemId,
+                P_Id = p.P_Id,
+                Item_Name = p.Item_Name,
+                Item_SerialNumber = p.Item_SerialNumber,
+                Item_Quantity = p.Item_Quantity,
+                Item_Price = p.Item_Price,
+                Item_Expiry_Date = p.Item_Expiry_Date,
+                Item_Selling_Price = p.Item_Selling_Price,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate,
+                ProductCategory = p.AddProduct?.Product_Category
+            }).ToList();
+
+            return ItemData;
+        }
+
+        //Stock Item List
+        public List<Add_ItemVM> Stocklist()
+        {
+            var stockItems = DB.Tbl_AddItem.Include(x => x.AddProduct).Include(x => x.Add_Sub_ProductModel).ToList();
+
+            var itemViewModels = stockItems.Select(item => new Add_ItemVM
+            {
+                ItemId = item.ItemId,
+                P_Id = item.P_Id,
+                S_P_Id=item.S_P_Id,
+                Item_Name = item.Item_Name,
+                Item_SerialNumber = item.Item_SerialNumber,
+                Item_Quantity = item.Item_Quantity,
+                Item_Price = item.Item_Price,
+                Item_Selling_Price = item.Item_Selling_Price,
+                Item_Expiry_Date = item.Item_Expiry_Date,
+                CreatedDate = item.CreatedDate,
+                UpdatedDate = item.UpdatedDate,
+                ProductCategory = item.AddProduct?.Product_Category,
+                SubProduct = item.Add_Sub_ProductModel?.Sub_Product_Name
+                // Map additional properties if needed
+            }).ToList();
+
+            return itemViewModels;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         //Get Sub Product DDl----------------
         public List<SelectListItem> GetSubDDl(int CategoryId)
@@ -377,7 +452,6 @@ namespace StoreManagment.Repository
 
             return categories;
         }
-
 
 
     }

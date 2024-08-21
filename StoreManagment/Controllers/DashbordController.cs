@@ -313,14 +313,22 @@ namespace StoreManagment.Controllers
         }
 
 
-
-        //Add Stock Item Get Method
-        [HttpGet("_AddStockIteams")]
-        public IActionResult _AddStockIteams()
+        [HttpGet("_AddItem")]
+        public IActionResult _AddItem()
         {
+            return PartialView();
+        }
+
+
+        //Add Stock Item Index
+        [HttpGet("_AddItemIndex")]
+        public IActionResult _AddItemIndex()
+        {
+
             return PartialView();
 
         }
+
 
         //Add Stock Item Post
         [HttpPost("_AddStockIteams")]
@@ -358,6 +366,96 @@ namespace StoreManagment.Controllers
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Stock Item List
+        [HttpGet("_GetStockList")]
+        public IActionResult _GetStockList()
+        {
+            var productList = repository.Stocklist(); // Yeh method database se product list la raha hai
+            return PartialView(productList);
+        }
+
         //Item Stock Partial view 
         [HttpGet("_StockDetail")]
         public IActionResult _StockDetail()
@@ -367,6 +465,19 @@ namespace StoreManagment.Controllers
 
 
 
+        [HttpPost("_SearchItm")]
+        public IActionResult _SearchItm([FromBody] Add_ItemModel model)
+        {
+            var item = repository.SearchItem(model); // Fetch the item using repository
+            if (item == null)
+            {
+                return Json(new { success = false, message = "Item not found" });
+            }
+            else
+            {
+                return PartialView(item);
+            }
+        }
 
 
 
