@@ -57,7 +57,7 @@ namespace StoreManagment.Repository
         bool AddItem(Add_ItemModel model);
 
         //Search Item
-        List<Add_ItemVM> SearchItem(Add_ItemModel model);
+        Add_ItemVM? SearchItem(Add_ItemModel model);
 
         //StockList
         List<Add_ItemVM> Stocklist();

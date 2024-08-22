@@ -35,7 +35,7 @@
                                     <div class="col-lg-6">
                                         @*Category Colum*@
                                         <label asp-for="P_Id">Category</label>
-                                        <select class="form-control" id="ItmSelectCate">
+                                        <select class="form-control" id="ItmSelectCateAdd">
                                             <option>--Select Category--</option>>
                                         </select>
                                     </div>
@@ -116,33 +116,40 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-4">
-                        <select class="form-control" id="ItmSelectCate">
-                            <option>--Select Category--</option>>
+                        <select class="form-control ml-2" id="StockSearch_Category">
+                            <option value="">--Select Category--</option>
                         </select>
                     </div>
                     <div class="col-lg-4">
-                        <select class="form-control" id="ItmSelectSub">
+                        <select class="form-control" id="StockSearch_SubProduct">
                             <option>--Select Sub Product--</option>>
                         </select>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" id="searchInput" />
+                        <input type="text" class="form-control" id="searchItmName" />
                     </div>
                 </div>
-                <div class="row">
-                    <div></div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-4">
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-outline-success" id="SearchItmBtn">Search</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+                    </div>
+
                 </div>
 
+                <div class="row mt-2" id="ItmSearchResult"></div>
 
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success" id="BtnUpdate" data-id="P_Id">Update</button>
-                <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
+
 </div>
+
 
 

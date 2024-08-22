@@ -313,13 +313,6 @@ namespace StoreManagment.Controllers
         }
 
 
-        [HttpGet("_AddItem")]
-        public IActionResult _AddItem()
-        {
-            return PartialView();
-        }
-
-
         //Add Stock Item Index
         [HttpGet("_AddItemIndex")]
         public IActionResult _AddItemIndex()
@@ -367,9 +360,37 @@ namespace StoreManagment.Controllers
 
 
 
+        //Search Item Result Partial View 
+        [HttpGet("_SearchItmResult")]
+        public IActionResult _SearchItmResult(int P_Id, int S_P_Id, string Item_Name)
+        {
+
+            if (P_Id > 0 && S_P_Id > 0 && Item_Name != null)
+            {
+                var model = new Add_ItemModel
+                {
+                    P_Id = P_Id,
+                    S_P_Id = S_P_Id,
+                    Item_Name = Item_Name
+                };
+
+                var item = repository.SearchItem(model);
+                if (item == null)
+                {
+                    return Json(new { success = false });
+                }
+                else
+                {
+                    return PartialView(item);
+                }
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
 
 
-
+        }
 
 
 
@@ -461,22 +482,6 @@ namespace StoreManagment.Controllers
         public IActionResult _StockDetail()
         {
             return PartialView();
-        }
-
-
-
-        [HttpPost("_SearchItm")]
-        public IActionResult _SearchItm([FromBody] Add_ItemModel model)
-        {
-            var item = repository.SearchItem(model); // Fetch the item using repository
-            if (item == null)
-            {
-                return Json(new { success = false, message = "Item not found" });
-            }
-            else
-            {
-                return PartialView(item);
-            }
         }
 
 

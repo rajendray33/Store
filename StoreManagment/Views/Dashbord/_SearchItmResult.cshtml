@@ -1,0 +1,92 @@
+﻿@model StoreManagment.ViewModel.Add_ItemVM
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="border p-3">
+                <div class="text-center mb-4">
+                    <h3 class="bg-primary text-white p-2">Item Details</h3>
+                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                        @Html.HiddenFor(model => model.ItemId)
+                        @Html.HiddenFor(model => model.P_Id)
+                        @Html.HiddenFor(model => model.S_P_Id)
+
+                        <tr>
+                            <th class="text-secondary">Item Name</th>
+                            <td style="text-transform: capitalize;">@Model.Item_Name</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Sub Product</th>
+                            <td style="text-transform: capitalize;">@Model.SubProduct</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Category</th>
+                            <td style="text-transform: capitalize;">@Model.ProductCategory</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Serial Number</th>
+                            <td>@Model.Item_SerialNumber</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Quantity</th>
+                            <td>@Model.Item_Quantity</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Price</th>
+                            <td>₹@Model.Item_Price</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Selling Price</th>
+                            <td>₹@Model.Item_Selling_Price</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Expiry Date</th>
+                            <td>@Model.Item_Expiry_Date?.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Created Date</th>
+                            <td>@Model.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                        <tr>
+                            <th class="text-secondary">Updated Date</th>
+                            <td>@Model.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row mt-3">
+                    <div class="col-lg-3">
+                        <button class="btn btn-outline-success" id="EditIteamBtn" data-id="@Model.ItemId">Edit <i class="bi bi-pencil"></i></button>
+                    </div> 
+                    <div class="col-lg-3">
+                        <button class="btn btn-outline-danger" id="DeleteSubProduct" data-id="@Model.ItemId">Delete <i class="bi bi-trash3"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table {
+        width: 100%;
+        margin: 0;
+    }
+
+        .table th {
+            width: 40%;
+        }
+
+        .table td {
+            width: 60%;
+        }
+
+    .border {
+        border: 1px solid #dee2e6;
+    }
+
+    .text-secondary {
+        font-weight: bold;
+    }
+</style>

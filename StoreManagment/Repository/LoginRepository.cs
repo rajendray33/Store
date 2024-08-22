@@ -343,43 +343,38 @@ namespace StoreManagment.Repository
             }
         }
 
-        //Item Search 
-        //public Add_ItemModel? SearchItem(Add_ItemVM model)
-        //{
-        //    var checkItm = DB.Tbl_AddItem.Include(x => x.AddProduct).Where(x => x.P_Id == categoryId && x.Item_Name == item).FirstOrDefault();
-        //    if (checkItm != null)
-        //    {
-        //        return checkItm;
-        //    }
-        //    else
-        //    {
-        //        return null;
-
-        //    }
-        //}
-        public List<Add_ItemVM> SearchItem(Add_ItemModel model)
+        public Add_ItemVM? SearchItem(Add_ItemModel model)
         {
-            var SubProductList = DB.Tbl_AddItem
-                .Include(x => x.AddProduct)
-                .Where(x => x.P_Id == model.P_Id && x.Item_Name == model.Item_Name)
-                .ToList();
+            var ItemSearch = DB.Tbl_AddItem.Include(x => x.AddProduct).Include(x => x.Add_Sub_ProductModel)
+            .Where(x => x.P_Id == model.P_Id && x.S_P_Id == model.S_P_Id && x.Item_Name == model.Item_Name).FirstOrDefault();
 
-            var ItemData = SubProductList.Select(p => new Add_ItemVM
+            if (ItemSearch == null)
             {
-                ItemId = p.ItemId,
-                P_Id = p.P_Id,
-                Item_Name = p.Item_Name,
-                Item_SerialNumber = p.Item_SerialNumber,
-                Item_Quantity = p.Item_Quantity,
-                Item_Price = p.Item_Price,
-                Item_Expiry_Date = p.Item_Expiry_Date,
-                Item_Selling_Price = p.Item_Selling_Price,
-                CreatedDate = p.CreatedDate,
-                UpdatedDate = p.UpdatedDate,
-                ProductCategory = p.AddProduct?.Product_Category
-            }).ToList();
+                return null;
+            }
+            else
+            {
+                // Map the found record to Add_ItemVM
+                var itemData = new Add_ItemVM
+                {
+                    ItemId = ItemSearch.ItemId,
+                    P_Id = ItemSearch.P_Id,
+                    S_P_Id = ItemSearch.S_P_Id,
+                    Item_Name = ItemSearch.Item_Name,
+                    Item_SerialNumber = ItemSearch.Item_SerialNumber,
+                    Item_Quantity = ItemSearch.Item_Quantity,
+                    Item_Price = ItemSearch.Item_Price,
+                    Item_Expiry_Date = ItemSearch.Item_Expiry_Date,
+                    Item_Selling_Price = ItemSearch.Item_Selling_Price,
+                    CreatedDate = ItemSearch.CreatedDate,
+                    UpdatedDate = ItemSearch.UpdatedDate,
+                    ProductCategory = ItemSearch.AddProduct?.Product_Category,
+                    SubProduct = ItemSearch.Add_Sub_ProductModel?.Sub_Product_Name
+                };
 
-            return ItemData;
+                return itemData;
+            }
+
         }
 
         //Stock Item List
@@ -391,7 +386,7 @@ namespace StoreManagment.Repository
             {
                 ItemId = item.ItemId,
                 P_Id = item.P_Id,
-                S_P_Id=item.S_P_Id,
+                S_P_Id = item.S_P_Id,
                 Item_Name = item.Item_Name,
                 Item_SerialNumber = item.Item_SerialNumber,
                 Item_Quantity = item.Item_Quantity,
