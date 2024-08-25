@@ -12,12 +12,28 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Dbcs")));
 
-// Configure authentication and authorization
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login/signin"; // Set your login path
-        options.AccessDeniedPath = "/Account/AccessDenied"; // Set your access denied path if needed
+        // Specify the path to redirect users who need to sign in
+        options.LoginPath = "/Login/signin";
+
+        // Specify the path to redirect users who don't have access
+        options.AccessDeniedPath = "/Account/AccessDenied";
+
+        // Set the expiration time of the authentication cookie
+        options.ExpireTimeSpan = TimeSpan.FromDays(15); // Cookie expiration time
+
+        // Optionally, enable sliding expiration
+        options.SlidingExpiration = true;
+
+        // Optionally, configure the cookie name
+        options.Cookie.Name = "YourAppCookieName";
+
+        // Optionally, configure other cookie settings
+        options.Cookie.HttpOnly = true; // Make the cookie accessible only via HTTP(S)
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Use the cookie only over HTTPS (same as request)
+        options.Cookie.SameSite = SameSiteMode.Lax; // Configure SameSite attribute
     });
 
 builder.Services.AddAuthorization(options =>

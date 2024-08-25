@@ -1,21 +1,53 @@
 ﻿@model StoreManagment.ViewModel.Add_ItemVM
+<style>
+    /* Spinner container style */
+    .spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        border: 8px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        border-top: 8px solid #3498db; /* Customize the color of the spinner */
+        animation: spin 1s linear infinite;
+        z-index: 1050; /* Ensure it appears on top of other content */
+    }
 
+    /* Animation for spinning effect */
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-2">
             <button type="button" class="btn btn-success" id="AddItemPopUp" data-bs-toggle="modal" data-bs-target="#ItemAdd">
-                Add Stock Item
+                <i class="bi bi-cloud-plus"></i>  Add Item
             </button>
         </div>
 
         <div class="col-lg-2">
             <button type="button" class="btn btn-success" id="SearchItmPopUp" data-bs-toggle="modal" data-bs-target="#SearchItm">
-                Search Item
+                <i class="bi bi-search"></i>   Search Item
             </button>
         </div>
+        <div class="col-lg-2">
+            <button type="button" class="btn btn-success" id="ViewStockList"><i class="bi bi-card-list"></i> View Stock</button>
+        </div>
+
+
         <div class="col-lg-6">
         </div>
     </div>
+
     @*
     @*Stock Item Add Modep Popup *@
 
@@ -126,7 +158,9 @@
                         </select>
                     </div>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" id="searchItmName" />
+                        <select class="form-control" id="searchItmName">
+                            <option>--Select Item--</option>>
+                        </select>
                     </div>
                 </div>
 
@@ -142,8 +176,13 @@
 
                 </div>
 
+                @* Item Detail Result Show Di*@
                 <div class="row mt-2" id="ItmSearchResult"></div>
 
+                <!-- Spinner HTML -->
+                @*<div id="spinner" class="spinner" style="display: none;"></div>*@
+
+               
 
             </div>
         </div>
@@ -152,4 +191,11 @@
 </div>
 
 
-
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            @*Stock Item List *@
+            <div class="row mt-2" id="StockItmTblList"></div>
+        </div>
+    </div>
+</div>

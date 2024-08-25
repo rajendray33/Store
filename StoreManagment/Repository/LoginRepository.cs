@@ -385,8 +385,8 @@ namespace StoreManagment.Repository
             var itemViewModels = stockItems.Select(item => new Add_ItemVM
             {
                 ItemId = item.ItemId,
-                P_Id = item.P_Id,
-                S_P_Id = item.S_P_Id,
+                //P_Id = item.P_Id,
+                //S_P_Id = item.S_P_Id,
                 Item_Name = item.Item_Name,
                 Item_SerialNumber = item.Item_SerialNumber,
                 Item_Quantity = item.Item_Quantity,
@@ -397,22 +397,50 @@ namespace StoreManagment.Repository
                 UpdatedDate = item.UpdatedDate,
                 ProductCategory = item.AddProduct?.Product_Category,
                 SubProduct = item.Add_Sub_ProductModel?.Sub_Product_Name
-                // Map additional properties if needed
             }).ToList();
 
             return itemViewModels;
         }
 
 
+        //Delete Stock Item 
+        public bool DeleteStockItem(int id)
+        {
+            var item = DB.Tbl_AddItem.FirstOrDefault(x => x.ItemId == id);
+
+            if (item != null)
+            {
+                DB.Tbl_AddItem.Remove(item);
+                DB.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 
 
+        //Get Item List Form Search Item DDl
+        public List<SelectListItem> GetItemsList(int SubProductId)
+        {
+            var items = new List<SelectListItem>();
 
+            if (SubProductId > 0)
+            {
+                items = DB.Tbl_AddItem
+                    .Where(x => x.S_P_Id == SubProductId)
+                    .Select(x => new SelectListItem
+                    {
+                        Value = x.ItemId.ToString(),
+                        Text = x.Item_Name
+                    })
+                    .ToList();
+            }
 
-
-
-
-
+            return items;
+        }
 
 
         //Get Sub Product DDl----------------

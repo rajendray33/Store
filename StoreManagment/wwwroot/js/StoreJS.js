@@ -368,7 +368,7 @@
 
 
 
-    //Add Item Index 
+    //Add Item Index => Use For Show Buttons
     $(document).on('click', '#AddIteamPopup', function () {
         debugger;
         $.ajax({
@@ -377,8 +377,6 @@
             cache: false,
             success: function (responce) {
                 $('#AddCategoryPopup').html(responce);
-                //GetStocklist();
-
             },
         })
     });
@@ -389,25 +387,12 @@
         $('#ItmSelectCateAdd').val('');
         $('#ItmSelectSub').empty();
         $('#ItmSelectSub').append('<option value="">--Select Sub Product--</option>');
+
         DDlCategory('#ItmSelectCateAdd');
         fetchSubProducts('#ItmSelectCateAdd', '#ItmSelectSub')
     })
 
-    //Hide Show Itm Table
 
-    $(document).on('click', '#HideTbl', function () {
-        debugger;
-        $('#ItemTable').toggle();
-        var btntbltoggl = $('#HideTbl').text();
-        if (btntbltoggl == 'View Item Recored') {
-            $('#HideTbl').text('Hide Item Recored');
-        }
-        else {
-            $('#HideTbl').text('View Item Recored');
-        }
-
-
-    })
 
     //Add Item post Ajax
     $(document).on('click', '#AddItemBtn', function () {
@@ -415,7 +400,7 @@
         if (Add_Item_Productvalidatoin()) {
             var userdata = {
                 S_P_Id: $('#ItmSelectSub').val(),
-                P_Id: $('#ItmSelectCate').val(),
+                P_Id: $('#ItmSelectCateAdd').val(),
                 Item_Name: $('#ItmName').val(),
                 Item_SerialNumber: $('#ItmSrNumber').val(),
                 Item_Quantity: $('#ItmQuntity').val(),
@@ -432,6 +417,7 @@
                     if (response.success) {
                         //GetSubProductList();
                         alertify.success('Item Adedes Successfully');
+                        GetStocklist();
                         restAll();
                     } else {
                         alertify.error('Item Not Added', 1000);
@@ -445,37 +431,27 @@
         }
     })
 
-    //View Stock Detail
-    $(document).on('click', '#ViewStockPopUp', function () {
-        debugger;
-        $.ajax({
-            type: 'GET',
-            url: '/Dashbord/_StockDetail',
-            cache: false,
-            success: function (responce) {
-                $('#ViewStock').html(responce);
-                DDlCategory();
-            },
-
-        })
-    })
-
-
     //Search Item Popup
     $(document).on('click', '#SearchItmPopUp', function () {
         debugger;
+        $('#ItmSearchResult').empty();
         $('#StockSearch_Category').val('');
-        $('#StockSearch_SubProduct').empty();
+        $('#StockSearch_SubProduct,#searchItmName').empty();
         $('#StockSearch_SubProduct').append('<option value="">--Select Sub Product--</option>');
+        $('#searchItmName').append('<option value="">--Select Item--</option>');
+        $("#StockSearch_Category,#StockSearch_SubProduct,#searchItmName").css("border", "");
+
 
         DDlCategory('#StockSearch_Category');
         fetchSubProducts('#StockSearch_Category', '#StockSearch_SubProduct');
+        fetchItems('#StockSearch_SubProduct', '#searchItmName');
     });
 
 
-    //Search item 
+    //Search item Ajax
     $(document).on('click', '#SearchItmBtn', function () {
         debugger;
+        //$("#spinner").show();
         if (ItemSearchValidation()) {
             var userData = {
                 P_Id: $('#StockSearch_Category').val(),
@@ -496,16 +472,73 @@
                         $('#ItmSearchResult').text('Result Not Found').css('color', 'red');
                     }
                 },
+                //complete: function () {
+                //    // Hide the spinner once the AJAX request completes
+                //    $("#spinner").hide();
+                //},
                 error: function (error) {
                     console.log("Error: ", error);
                 }
             });
         }
+
     });
 
 
+    // Stock Item Delete Ajax
+    $(document).on('click', '#Stock_ItmDeleteBtn', function () {
+        var id = $(this).data('id');  // Button se item ID lena
+
+        alertify.confirm('Delete Confirmation', 'Are you sure you want to delete this Item?',
+            function () { // Agar user confirm kare
+                $.ajax({
+                    type: 'POST',
+                    url: '/Dashbord/DeleteStockItem?ItmId=' + id,
+                    success: function (response) {
+                        if (response.success) {
+                            GetStocklist();
+                            alertify.success("Item deleted successfully.");
+                            $('#ItmSearchResult').empty();
+                            $('#StockSearch_Category,#searchItmName,#StockSearch_SubProduct').val('');
+                            $("#StockSearch_Category,#StockSearch_SubProduct,#searchItmName").css("border", "");
+                        } else {
+                            alertify.error("Failed to delete Product: " + response.message);
+                        }
+                    },
+                    error: function () {
+                        alertify.error('There was an error deleting the product.');
+                    }
+                });
+            },
+            function () { // Agar user cancel kare
+                alertify.error('Delete action canceled.');
+            });
+    });
 
 
+    //Hide Show Itm Table
+
+    $(document).on('click', '#HideTbl', function () {
+        debugger;
+        $('#ItemTable').toggle();
+        var btntbltoggl = $('#HideTbl').text();
+        if (btntbltoggl == 'View Item Recored') {
+            $('#HideTbl').text('Hide Item Recored');
+        }
+        else {
+            $('#HideTbl').text('View Item Recored');
+        }
+
+
+    })
+
+    //View Stock List
+    $(document).on('click', '#ViewStockList', function () {
+      
+        $('#StockItmTblList').empty();
+        GetStocklist();
+        //$('#ViewStockList').text('Hide List')
+    })
 })
 
 
@@ -520,13 +553,40 @@
 
 
 
+//Item List In Search Boxfunction fetchItems
+function fetchItems(subProductDropdownId, itemDropdownId) {
+    $(document).on('change', subProductDropdownId, function () {
+        var SubProductId = $(this).val();
+        debugger;
+        if (SubProductId > 0) {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashbord/GetItmList',
+                data: { SubProductId: SubProductId },
+                cache: false,
+                success: function (response) {
+                    var $itemDropdown = $(itemDropdownId);
+                    $itemDropdown.empty();
+                    $itemDropdown.append('<option value="">--Select Item--</option>');
 
+                    if (response != null && response.length > 0) {
+                        $.each(response, function (index, item) {
+                            $itemDropdown.append('<option value="' + item.text + '">' + item.text + '</option>');
+                        });
+                    } else {
+                        $itemDropdown.append('<option value="">No Items Found</option>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + error);
+                },
 
-
-
-
-
-
+            });
+        } else {
+            alertify.error("Please select a valid sub product.");
+        }
+    });
+}
 
 
 //DDl Category Itm
@@ -557,7 +617,7 @@ function DDlCategory(dropdownId) {
 
 //DDl Sub Product 
 function fetchSubProducts(categoryDropdownId, subProductDropdownId) {
-
+    debugger;
     $(document).on('change', categoryDropdownId, function () {
         var CategoryId = $(this).val();
         if (CategoryId > 0) {
@@ -665,7 +725,8 @@ function GetStocklist() {
         url: '/dashbord/_GetStockList',
         cache: false,
         success: function (response) {
-            $('#StockItmTbldata').html(response);
+            debugger;
+            $('#StockItmTblList').html(response);
         },
         error: function (xhr, status, error) {
             console.log('Error: ' + error);
@@ -919,6 +980,8 @@ function ItemSearchValidation() {
     if (category == "--Select Category--" || category == '') {
         $("#StockSearch_Category").css("border", "1.5px solid rgb(255, 0, 0)");
         alertify.error('Please select a category');
+
+
         isValid = false;
     } else {
         $("#StockSearch_Category").css("border", "1.5px solid rgb(122, 245, 71)");

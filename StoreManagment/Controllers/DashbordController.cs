@@ -393,8 +393,33 @@ namespace StoreManagment.Controllers
         }
 
 
-
-
+        [HttpPost("DeleteStockItem")]
+        public IActionResult DeleteStockItem(int ItmId)
+        {
+            try
+            {
+                if (ItmId > 0)
+                {
+                    var itmremove = repository.DeleteStockItem(ItmId);
+                    if (itmremove == true)
+                    {
+                        return Json(new { success = true });
+                    }
+                    else
+                    {
+                        return Json(new { success = false });
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
 
 
 
@@ -477,35 +502,43 @@ namespace StoreManagment.Controllers
             return PartialView(productList);
         }
 
-        //Item Stock Partial view 
-        [HttpGet("_StockDetail")]
-        public IActionResult _StockDetail()
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Get Itm List For Search Itm
+        [HttpGet("GetItmList")]
+        public JsonResult GetItmList(int SubProductId)
         {
-            return PartialView();
+            var ItmList = repository.GetItemsList(SubProductId);
+            if (ItmList == null)
+            {
+                return Json(new { success = false });
+            }
+            else
+            {
+                return new JsonResult(ItmList);
+            }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

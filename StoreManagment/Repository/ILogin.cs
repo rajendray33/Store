@@ -59,6 +59,12 @@ namespace StoreManagment.Repository
         //Search Item
         Add_ItemVM? SearchItem(Add_ItemModel model);
 
+        //Delete Stock Item
+        bool DeleteStockItem(int id);
+
+        //Item Featch List For Search Itm
+        List<SelectListItem> GetItemsList(int SubProductId);
+
         //StockList
         List<Add_ItemVM> Stocklist();
     }

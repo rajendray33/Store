@@ -43,15 +43,15 @@
                         </tr>
                         <tr>
                             <th class="text-secondary">Expiry Date</th>
-                            <td>@Model.Item_Expiry_Date?.ToString("yyyy-MM-dd")</td>
+                            <td>@Model.Item_Expiry_Date?.ToString("dd-MM-yyyy")</td>
                         </tr>
                         <tr>
                             <th class="text-secondary">Created Date</th>
-                            <td>@Model.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@Model.CreatedDate?.ToString("dd-MM-yyyy")</td>
                         </tr>
                         <tr>
                             <th class="text-secondary">Updated Date</th>
-                            <td>@Model.UpdatedDate?.ToString("yyyy-MM-dd")</td>
+                            <td>@Model.UpdatedDate?.ToString("dd-MM-yyyy")</td>
                         </tr>
                     </tbody>
                 </table>
@@ -60,7 +60,7 @@
                         <button class="btn btn-outline-success" id="EditIteamBtn" data-id="@Model.ItemId">Edit <i class="bi bi-pencil"></i></button>
                     </div> 
                     <div class="col-lg-3">
-                        <button class="btn btn-outline-danger" id="DeleteSubProduct" data-id="@Model.ItemId">Delete <i class="bi bi-trash3"></i></button>
+                        <button class="btn btn-outline-danger" id="Stock_ItmDeleteBtn" data-id="@Model.ItemId">Delete <i class="bi bi-trash3"></i></button>
                     </div>
                 </div>
             </div>

@@ -53,41 +53,44 @@ namespace StoreManagment.Controllers
         [HttpPost]
         [Route("signin")]
         [Route("")]
-        public JsonResult Signin([FromBody] LoginVM model)
+        public async Task<JsonResult> Signin([FromBody] LoginVM model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = repository.LoginMtd(model);
-
-                if (user != null)
-                {
-                    if (!string.IsNullOrEmpty(user.Email))
-                    {
-                        // Create claims
-                        var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Name)
-                };
-
-                        // Create identity
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        // Create principal
-                        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-                        // Sign in user
-                        HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal).Wait();
-
-                        return Json(new { success = true });
-                    }
-                }
-                else
-                {
-                    // Return failure JSON response
-                    return Json(new { success = false });
-                }
+                return Json(new { success = false, message = "Enter valid details" });
             }
-            // Return failure JSON response if model state is not valid
-            return Json(new { success = false, message = "Enter Details" });
+
+            var user = repository.LoginMtd(model);
+
+            if (user == null || string.IsNullOrEmpty(user.Email))
+            {
+                return Json(new { success = false, message = "Invalid login credentials" });
+            }
+
+            // Create claims
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Name, user.Name)
+    };
+
+            // Create identity
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Create principal
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            // Set authentication properties
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(15), // Optional: Set cookie expiration
+                IsPersistent = true // Optional: Maintain user session across multiple requests
+            };
+
+            // Sign in user
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authProperties);
+
+            return Json(new { success = true });
         }
 
 
