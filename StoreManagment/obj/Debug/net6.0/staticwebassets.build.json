@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "e+c6YyeT2c0Gt0tBEBFKMJvcqYLp7IVWuD9hRw7Y7XU=",
+  "Hash": "dTxuEJZs0gAbalsCzYGMVXmPhTwqw8ZqqdJAi6vX084=",
   "Source": "StoreManagment",
   "BasePath": "_content/StoreManagment",
   "Mode": "Default",
@@ -8585,12 +8585,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "E:\\Store\\StoreManagment\\wwwroot\\Image\\HeadedrLogo.PNG",
+      "Identity": "E:\\Store\\StoreManagment\\wwwroot\\Image\\Realme10.jpg",
       "SourceId": "StoreManagment",
       "SourceType": "Discovered",
       "ContentRoot": "E:\\Store\\StoreManagment\\wwwroot\\",
       "BasePath": "_content/StoreManagment",
-      "RelativePath": "Image/HeadedrLogo.PNG",
+      "RelativePath": "Image/Realme10.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -8599,7 +8599,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\Image\\HeadedrLogo.PNG"
+      "OriginalItemSpec": "wwwroot\\Image\\Realme10.jpg"
     },
     {
       "Identity": "E:\\Store\\StoreManagment\\wwwroot\\js\\site.js",

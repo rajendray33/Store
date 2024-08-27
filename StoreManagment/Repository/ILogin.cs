@@ -54,18 +54,19 @@ namespace StoreManagment.Repository
         //GetDDL Category For itm 
         List<SelectListItem> DDLGetAllCategories();
         //Add Stock Iteam------
-        bool AddItem(Add_ItemModel model);
+        int AddItem(Add_ItemModel model);
 
         //Search Item
         Add_ItemVM? SearchItem(Add_ItemModel model);
 
         //Delete Stock Item
-        bool DeleteStockItem(int id);
+        string? DeleteStockItem(int id);
 
         //Item Featch List For Search Itm
         List<SelectListItem> GetItemsList(int SubProductId);
 
         //StockList
         List<Add_ItemVM> Stocklist();
+
     }
 }

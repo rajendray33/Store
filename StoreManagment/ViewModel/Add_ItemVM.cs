@@ -21,7 +21,7 @@ namespace StoreManagment.ViewModel
         public int? Item_Selling_Price { get; set; }
         [Required]
         public DateTime? Item_Expiry_Date { get; set; }
-
+        public string? Image { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 

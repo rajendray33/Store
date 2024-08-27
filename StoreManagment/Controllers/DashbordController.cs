@@ -325,10 +325,28 @@ namespace StoreManagment.Controllers
 
         //Add Stock Item Post
         [HttpPost("_AddStockIteams")]
-        public IActionResult _AddStockIteams([FromBody] Add_ItemVM model)
+        [HttpPost]
+        public async Task<IActionResult> _AddStockIteams([FromForm] Add_ItemVM model, IFormFile? Item_Image)
         {
             if (ModelState.IsValid)
             {
+                string? imagePath = null;
+
+                // Handle the file upload if there is an image
+                if (Item_Image != null && Item_Image.Length > 0)
+                {
+                    var fileName = Path.GetFileName(Item_Image.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Image", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Item_Image.CopyToAsync(stream);
+                    }
+
+                    imagePath = "/Image/" + fileName; // Save the relative path to the database
+                }
+
+                // Create model object
                 Add_ItemModel mdl = new Add_ItemModel()
                 {
                     P_Id = model.P_Id,
@@ -339,12 +357,15 @@ namespace StoreManagment.Controllers
                     Item_Price = model.Item_Price,
                     Item_Selling_Price = model.Item_Selling_Price,
                     Item_Expiry_Date = model.Item_Expiry_Date,
-
+                    Image = imagePath // Save the image path, which can be null
                 };
-                var item = repository.AddItem(mdl);
-                if (item == true)
+
+                // Save item
+                var itemId = repository.AddItem(mdl);
+
+                if (itemId > 0)
                 {
-                    return Json(new { success = true });
+                    return Json(new { success = true, itemId });
                 }
                 else
                 {
@@ -355,8 +376,9 @@ namespace StoreManagment.Controllers
             {
                 return Json(new { success = false });
             }
-
         }
+
+
 
 
 
@@ -400,15 +422,20 @@ namespace StoreManagment.Controllers
             {
                 if (ItmId > 0)
                 {
-                    var itmremove = repository.DeleteStockItem(ItmId);
-                    if (itmremove == true)
+                    var imagePath = repository.DeleteStockItem(ItmId);
+
+                    if (!string.IsNullOrEmpty(imagePath))
                     {
-                        return Json(new { success = true });
+                        var fullImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath.TrimStart('/'));
+
+                        if (System.IO.File.Exists(fullImagePath))
+                        {
+                            System.IO.File.Delete(fullImagePath);
+                        }
                     }
-                    else
-                    {
-                        return Json(new { success = false });
-                    }
+
+                    // Return success regardless of whether an image was present
+                    return Json(new { success = true });
                 }
                 else
                 {
@@ -420,6 +447,8 @@ namespace StoreManagment.Controllers
                 return new JsonResult(new { success = false, message = ex.Message });
             }
         }
+
+
 
 
 

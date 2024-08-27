@@ -398,30 +398,41 @@
     $(document).on('click', '#AddItemBtn', function () {
         debugger;
         if (Add_Item_Productvalidatoin()) {
-            var userdata = {
-                S_P_Id: $('#ItmSelectSub').val(),
-                P_Id: $('#ItmSelectCateAdd').val(),
-                Item_Name: $('#ItmName').val(),
-                Item_SerialNumber: $('#ItmSrNumber').val(),
-                Item_Quantity: $('#ItmQuntity').val(),
-                Item_Price: $('#ItmPrice').val(),
-                Item_Selling_Price: $('#ItmSellingPrice').val(),
-                Item_Expiry_Date: $('#ItmExpiryDate').val()
-            };
+            var formData = new FormData();
+
+            // Adding form data
+            formData.append('S_P_Id', $('#ItmSelectSub').val());
+            formData.append('P_Id', $('#ItmSelectCateAdd').val());
+            formData.append('Item_Name', $('#ItmName').val());
+            formData.append('Item_SerialNumber', $('#ItmSrNumber').val());
+            formData.append('Item_Quantity', $('#ItmQuntity').val());
+            formData.append('Item_Price', $('#ItmPrice').val());
+            formData.append('Item_Selling_Price', $('#ItmSellingPrice').val());
+            formData.append('Item_Expiry_Date', $('#ItmExpiryDate').val());
+
+            // Adding image file
+            var fileInput = $('#ItmimageInput')[0];
+            if (fileInput.files.length > 0) {
+                formData.append('Item_Image', fileInput.files[0]);
+            }
+
             $.ajax({
                 type: 'POST',
                 url: '/Dashbord/_AddStockIteams',
-                contentType: 'application/json',
-                data: JSON.stringify(userdata),
+                contentType: false, // 'multipart/form-data' handled by jQuery
+                processData: false, // Prevent jQuery from processing the data
+                data: formData,
                 success: function (response) {
-                    if (response.success) {
-                        //GetSubProductList();
-                        alertify.success('Item Adedes Successfully');
+                    debugger;
+                    varItmId = response.itemId;
+                    if (response.success || varItmId > 0) {
                         GetStocklist();
+                        $('#imagePreview').html(''); // Remove Item Img PrieView
+                        $('#ItmimageInput').val('');
                         restAll();
+                        alertify.success('Item Added Successfully');
                     } else {
                         alertify.error('Item Not Added', 1000);
-
                     }
                 },
                 error: function () {
@@ -429,7 +440,8 @@
                 }
             });
         }
-    })
+    });
+
 
     //Search Item Popup
     $(document).on('click', '#SearchItmPopUp', function () {
@@ -534,12 +546,26 @@
 
     //View Stock List
     $(document).on('click', '#ViewStockList', function () {
-      
+
         $('#StockItmTblList').empty();
         GetStocklist();
         //$('#ViewStockList').text('Hide List')
     })
+
+    //Item Add PriView
+    $(document).on('change', '#ItmimageInput', function () {
+        var file = this.files[0];
+        var reader = new FileReader();
+        debugger;
+        reader.onload = function (event) {
+            var image = $('<img>').attr('src', event.target.result).attr('id', 'ItemImg');
+            $('#imagePreview').html(image);
+        };
+
+        reader.readAsDataURL(file);
+    });
 })
+
 
 
 

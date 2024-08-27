@@ -8,10 +8,11 @@
                     <h3 class="bg-primary text-white p-2">Item Details</h3>
                 </div>
                 <table class="table table-bordered">
+                    @Html.HiddenFor(model => model.ItemId)
+                    @Html.HiddenFor(model => model.P_Id)
+                    @Html.HiddenFor(model => model.S_P_Id)
                     <tbody>
-                        @Html.HiddenFor(model => model.ItemId)
-                        @Html.HiddenFor(model => model.P_Id)
-                        @Html.HiddenFor(model => model.S_P_Id)
+                       
 
                         <tr>
                             <th class="text-secondary">Item Name</th>
@@ -55,12 +56,17 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <div class="row mt-3">
                     <div class="col-lg-3">
                         <button class="btn btn-outline-success" id="EditIteamBtn" data-id="@Model.ItemId">Edit <i class="bi bi-pencil"></i></button>
                     </div> 
                     <div class="col-lg-3">
                         <button class="btn btn-outline-danger" id="Stock_ItmDeleteBtn" data-id="@Model.ItemId">Delete <i class="bi bi-trash3"></i></button>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="@Model.Image" alt="Item Image" style="width: 130px; height: 125px; margin-left: 150px; border-radius: 35px;" />
+
                     </div>
                 </div>
             </div>

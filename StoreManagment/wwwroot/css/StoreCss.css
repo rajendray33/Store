@@ -84,7 +84,7 @@ label {
     font-weight: 500;
 }
 
-input,select {
+input, select {
     display: block;
     height: 45px;
     width: 100%;
@@ -98,10 +98,11 @@ input,select {
     font-size: 16px;
     font-weight: 300;
 }
-    input,select:hover {
+
+    input, select:hover {
         border: 1px groove white;
-        background-color:whitesmoke;
-        color:black;
+        background-color: whitesmoke;
+        color: black;
         /*color: black;*/
     }
 
@@ -160,7 +161,7 @@ button {
 
 
 
-   /* Registraton  form Scc Here */
+/* Registraton  form Scc Here */
 .modal-content {
     position: relative;
     display: flex;
@@ -176,4 +177,14 @@ button {
     border: 1px solid white;
     border-radius: 57px;
     outline: 0;
+}
+
+
+/*Stock Item Add Item Image */
+#ItemImg {
+    width: 85px;
+    margin-left: 50px;
+    height: 100px;
+    filter: drop-shadow(2px 4px 6px gray);
+    border-radius: 5px;
 }

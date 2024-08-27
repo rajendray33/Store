@@ -27,6 +27,9 @@ namespace StoreManagment.Models
         [Column("Item_Expiry_Date")]
         public DateTime? Item_Expiry_Date { get; set; }
 
+        [Column("Image", TypeName = "nvarchar(255)")]
+        public string? Image { get; set; }
+
         [Column("CreatedDate", TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
 

@@ -34,6 +34,10 @@ namespace StoreManagment.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("CreatedDate");
 
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("Image");
+
                     b.Property<DateTime?>("Item_Expiry_Date")
                         .HasColumnType("datetime2")
                         .HasColumnName("Item_Expiry_Date");

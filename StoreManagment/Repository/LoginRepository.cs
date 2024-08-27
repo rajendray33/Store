@@ -326,20 +326,21 @@ namespace StoreManagment.Repository
 
 
         //Add Item  Post Method -------------------
-        public bool AddItem(Add_ItemModel model)
+        public int AddItem(Add_ItemModel model)
         {
             if (model != null)
             {
                 model.CreatedDate = DateTime.Now;
                 model.UpdatedDate = null;
-                DB.Tbl_AddItem.Add(model);
-                DB.SaveChanges();
-                return true;
-            }
 
+                DB.Tbl_AddItem.Add(model);
+                DB.SaveChanges();  // Pehle item ko save karte hain taaki iska Id generate ho jaye
+
+                return model.ItemId; // Item ka ID return karte hain taaki image upload ke process mein use ho
+            }
             else
             {
-                return false;
+                return 0;  // Agar model null hai toh ID 0 return karein, jo ki failure indicate karega
             }
         }
 
@@ -369,7 +370,9 @@ namespace StoreManagment.Repository
                     CreatedDate = ItemSearch.CreatedDate,
                     UpdatedDate = ItemSearch.UpdatedDate,
                     ProductCategory = ItemSearch.AddProduct?.Product_Category,
-                    SubProduct = ItemSearch.Add_Sub_ProductModel?.Sub_Product_Name
+                    SubProduct = ItemSearch.Add_Sub_ProductModel?.Sub_Product_Name,
+                    Image= ItemSearch.Image
+                    
                 };
 
                 return itemData;
@@ -393,6 +396,7 @@ namespace StoreManagment.Repository
                 Item_Price = item.Item_Price,
                 Item_Selling_Price = item.Item_Selling_Price,
                 Item_Expiry_Date = item.Item_Expiry_Date,
+                //Image= item.Image,
                 CreatedDate = item.CreatedDate,
                 UpdatedDate = item.UpdatedDate,
                 ProductCategory = item.AddProduct?.Product_Category,
@@ -404,21 +408,25 @@ namespace StoreManagment.Repository
 
 
         //Delete Stock Item 
-        public bool DeleteStockItem(int id)
+        public string? DeleteStockItem(int id)
         {
             var item = DB.Tbl_AddItem.FirstOrDefault(x => x.ItemId == id);
 
             if (item != null)
             {
+                var imagePath = item.Image;
+
                 DB.Tbl_AddItem.Remove(item);
                 DB.SaveChanges();
-                return true;
+
+                return imagePath; // Return the image path
             }
             else
             {
-                return false;
+                return null; // Indicate that no item was found
             }
         }
+
 
 
 
