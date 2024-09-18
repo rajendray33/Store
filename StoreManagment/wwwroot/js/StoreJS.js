@@ -39,7 +39,7 @@
     //Registraton PopUp
 
     $(document).on('click', '#AddNewBtn', function () {
-        debugger;
+
         $.ajax({
             type: 'Get',
             url: '/LoginHome/_AddNew',
@@ -95,13 +95,13 @@
 
 
     $(document).on('click', '#ForgetPassword', function () {
-        debugger;
+
         alertify.success('okok')
     })
 
     //Add Products Popup Ajax
     $(document).on('click', '#AddProductPopUp', function () {
-        debugger;
+
 
         $.ajax({
             type: 'Get',
@@ -117,7 +117,7 @@
 
     //Product Add Post Ajax
     $(document).on('click', '#AddProductBtn', function (event) {
-        debugger;
+
         if (AddProductvalidatoin()) {
             var productname = $('#CategoryName').val();
 
@@ -154,7 +154,7 @@
 
     //Product Category Edit Ajax
     $(document).on('click', '#EditProductCategory', function () {
-        debugger;
+
         var id = $(this).data('id');
         $.ajax({
             type: 'GET',
@@ -171,7 +171,7 @@
 
     //Category Update Post Ajax
     $(document).on('click', '#BtnUpdate', function (event) {
-        debugger;
+
         if (EditProductvalidatoin()) {
 
             var productname = $('#UCategory').val();
@@ -231,7 +231,7 @@
 
     //Add Sub Product Get Ajax
     $(document).on('click', '#AddSubProductPopUp', function () {
-        debugger;
+
         $.ajax({
             type: 'GET',
             url: '/Dashbord/_AddSubProduct',
@@ -248,7 +248,7 @@
 
     //Add SubProduct Post AJax
     $(document).on('click', '#AddSubProductBtn', function () {
-        debugger;
+
         if (Add_Sub_Productvalidatoin()) {
             var userdata = {
                 Sub_Product_Name: $('#SubPN').val(),
@@ -283,7 +283,7 @@
 
     //Edit SubProduct Get Ajax
     $(document).on('click', '#EditSubProduct', function () {
-        debugger;
+
         var id = $(this).data('id');
         $.ajax({
             type: 'GET',
@@ -307,7 +307,7 @@
 
     //Sub Product Update Post Ajax 
     $(document).on('click', '#BtnUpdate_SubProduct', function (event) {
-        debugger;
+
         if (Update_Sub_Productvalidatoin()) {
             var userdata = {
                 Sub_P_Id: $('#Sub_P_UpdateId').val(),
@@ -369,40 +369,58 @@
 
 
     //Add Item Index => Use For Show Buttons
-    $(document).on('click', '#AddIteamPopup', function () {
-        debugger;
+    $(document).on('click', '#AddItmIndex', function () {
+
         $.ajax({
             type: 'Get',
             url: '/Dashbord/_AddItemIndex',
             cache: false,
             success: function (responce) {
+                $('#AddCategoryPopup').empty();
                 $('#AddCategoryPopup').html(responce);
+                $('#StockItmTblList').empty();
+                GetStocklist();
+
+                DDlParties();
+                //DropDowns M Category And Sub Product Bind
+                DDlCategory('#ItmSelectCateAdd');
+                fetchSubProducts('#ItmSelectCateAdd', '#ItmSelectSub');
+
             },
+
         })
     });
 
     //Add Item PopUp
     $(document).on('click', '#AddItemPopUp', function () {
-        debugger;
+        $('#exampleModalLabel').text('Add Stock Item');
+        $('#AddItemBtn').text('Add Item');
         $('#ItmSelectCateAdd').val('');
         $('#ItmSelectSub').empty();
         $('#ItmSelectSub').append('<option value="">--Select Sub Product--</option>');
+        $('#imagePreview').html(''); // Remove Item Img PrieView
+        $('#ItmimageInput').val('');
+        restAll();
 
-        DDlCategory('#ItmSelectCateAdd');
-        fetchSubProducts('#ItmSelectCateAdd', '#ItmSelectSub')
     })
 
 
 
     //Add Item post Ajax
+
     $(document).on('click', '#AddItemBtn', function () {
-        debugger;
+
+
         if (Add_Item_Productvalidatoin()) {
+
+            var itmid = $('#ItmIdEditValue').val();
             var formData = new FormData();
 
-            // Adding form data
-            formData.append('S_P_Id', $('#ItmSelectSub').val());
+            formData.append('Party_Id', $('#ItmSelectParty').val());
+            formData.append('Gst_No', $('#ItmSelectGstNo').val());
             formData.append('P_Id', $('#ItmSelectCateAdd').val());
+            formData.append('S_P_Id', $('#ItmSelectSub').val());
+            formData.append('ItemId', itmid);
             formData.append('Item_Name', $('#ItmName').val());
             formData.append('Item_SerialNumber', $('#ItmSrNumber').val());
             formData.append('Item_Quantity', $('#ItmQuntity').val());
@@ -410,29 +428,32 @@
             formData.append('Item_Selling_Price', $('#ItmSellingPrice').val());
             formData.append('Item_Expiry_Date', $('#ItmExpiryDate').val());
 
-            // Adding image file
-            var fileInput = $('#ItmimageInput')[0];
-            if (fileInput.files.length > 0) {
-                formData.append('Item_Image', fileInput.files[0]);
-            }
+            // Add image file to FormData
+            var imageFile = $('#ItmimageInput')[0].files[0];
+            formData.append('Item_Image', imageFile);
 
             $.ajax({
                 type: 'POST',
                 url: '/Dashbord/_AddStockIteams',
-                contentType: false, // 'multipart/form-data' handled by jQuery
-                processData: false, // Prevent jQuery from processing the data
+                contentType: false,
+                processData: false,
                 data: formData,
                 success: function (response) {
-                    debugger;
                     varItmId = response.itemId;
-                    if (response.success || varItmId > 0) {
+                    if (response == "Updated") {
                         GetStocklist();
-                        $('#imagePreview').html(''); // Remove Item Img PrieView
-                        $('#ItmimageInput').val('');
+                        $('#ItemAdd').modal('toggle')
+                        restAll();
+                        alertify.success("Updated Successfully")
+                    }
+                    else if (response.success || varItmId > 0) {
+                        GetStocklist();
+                        $('#ItemAdd').modal('toggle')
                         restAll();
                         alertify.success('Item Added Successfully');
-                    } else {
-                        alertify.error('Item Not Added', 1000);
+                    }
+                    else {
+                        alertify.error('Item Not Added');
                     }
                 },
                 error: function () {
@@ -440,12 +461,56 @@
                 }
             });
         }
+
+    });
+
+
+    //Item Edit
+    $(document).on('click', '#EditItemBtn', function () {
+
+        restAll();
+        $('#ItmSelectSub').empty();
+        $('#ItmSelectSub').append('<option value="">--Select Sub Product--</option>');
+
+        var ItmId = $(this).data('id');
+
+        var row = $(this).closest('tr');
+
+        var SPID = row.find('td:eq(2)').text();
+        var PID = row.find('td:eq(3)').text();
+        var Name = row.find('td:eq(4)').text();
+        var gst_no = row.find('td:eq(8)').text();
+        var SNO = row.find('td:eq(9)').text();
+        var Qty = row.find('td:eq(10)').text();
+        var Price = row.find('td:eq(11)').text();
+        var sellPrice = row.find('td:eq(12)').text();
+        var Expr = row.find('td:eq(13)').text();
+        var partyid = row.find('td:eq(14)').text();
+
+        $('#ItemAdd').modal('toggle');
+        $('#exampleModalLabel').text('Update Stock Item');
+        $('#AddItemBtn').text('Update Item');
+
+
+
+        $('#ItmSelectCateAdd').val(PID);
+        $('#ItmSelectSub').val(SPID);
+        $('#ItmIdEditValue').val(ItmId);
+        $('#ItmName').val(Name);
+        $('#ItmSelectGstNo').val(gst_no);
+        $('#ItmSelectParty').val(partyid);
+        $('#ItmSrNumber').val(SNO);
+        $('#ItmQuntity').val(Qty);
+        $('#ItmPrice').val(Price);
+        $('#ItmSellingPrice').val(sellPrice);
+        $('#ItmExpiryDate').val(Expr);
+
     });
 
 
     //Search Item Popup
     $(document).on('click', '#SearchItmPopUp', function () {
-        debugger;
+
         $('#ItmSearchResult').empty();
         $('#StockSearch_Category').val('');
         $('#StockSearch_SubProduct,#searchItmName').empty();
@@ -462,7 +527,7 @@
 
     //Search item Ajax
     $(document).on('click', '#SearchItmBtn', function () {
-        debugger;
+
         //$("#spinner").show();
         if (ItemSearchValidation()) {
             var userData = {
@@ -518,7 +583,9 @@
                         }
                     },
                     error: function () {
-                        alertify.error('There was an error deleting the product.');
+                        alertify.error('There was an error deleting the product.', 10000);
+
+
                     }
                 });
             },
@@ -528,35 +595,11 @@
     });
 
 
-    //Hide Show Itm Table
-
-    $(document).on('click', '#HideTbl', function () {
-        debugger;
-        $('#ItemTable').toggle();
-        var btntbltoggl = $('#HideTbl').text();
-        if (btntbltoggl == 'View Item Recored') {
-            $('#HideTbl').text('Hide Item Recored');
-        }
-        else {
-            $('#HideTbl').text('View Item Recored');
-        }
-
-
-    })
-
-    //View Stock List
-    $(document).on('click', '#ViewStockList', function () {
-
-        $('#StockItmTblList').empty();
-        GetStocklist();
-        //$('#ViewStockList').text('Hide List')
-    })
-
     //Item Add PriView
     $(document).on('change', '#ItmimageInput', function () {
         var file = this.files[0];
         var reader = new FileReader();
-        debugger;
+
         reader.onload = function (event) {
             var image = $('<img>').attr('src', event.target.result).attr('id', 'ItemImg');
             $('#imagePreview').html(image);
@@ -564,12 +607,250 @@
 
         reader.readAsDataURL(file);
     });
+
+
+    $(document).on('click', '#AddPartyBtn1', function () {
+
+        $('#PartyModelPopupLabl').text('Add Party');
+        $('#SubmitParty').text('Add Party');
+        $('#Partyname, #PartyGstNo, #PartyPhoneNo, #PartyEmail, #PartyAddress, #PartyStoreName').css("border", "");
+
+
+        ResetParties();
+    })
+
+    //Add Parties Model popup
+    $(document).on('click', '#AddParty', function () {
+
+        $.ajax({
+            type: 'get',
+            url: '/Dashbord/_PartyView',
+            success: function (responce) {
+                $('#AddCategoryPopup').empty();
+                $('#AddCategoryPopup').html(responce);
+                GetPartiesList();
+            }
+        })
+
+    })
+
+    //Parties Post Ajax 
+    $(document).on('click', '#SubmitParty', function () {
+
+        var id = $('#partiesidinput').val();
+
+        var partyData = {
+            PartyId: id,
+            PartyName: $('#Partyname').val(),
+            GstNo: $('#PartyGstNo').val(),
+            PhoneNo: $('#PartyPhoneNo').val(),
+            Email: $('#PartyEmail').val(),
+            Address: $('#PartyAddress').val(),
+            StoreName: $('#PartyStoreName').val()
+        };
+
+        if (AddPartyValidation()) {
+            $.ajax({
+                type: 'POST',
+                url: '/Dashbord/_PartyView',
+                contentType: 'application/json',
+                data: JSON.stringify(partyData),
+                success: function (response) {
+                    if (response == "Updatesuccess") {
+                        GetPartiesList();
+                        alertify.success('Party Updated Succesfully');
+                        ResetParties();
+                        $('#AddpartyModelPopup').modal('toggle')
+                    }
+                    else if (response == "NotUpdate") {
+                        alertify.error('Party Not Updated');
+                    }
+
+                    else if (response == "AlredyExit") {
+                        alertify.error('Parties Alredy Exit Please Ensure Details');
+                        $('#PartyPhoneNo').css("border", "1.5px solid red");
+                        $('#PartyEmail').css("border", "1.5px solid red");
+                    }
+                    else if (response == "AddSuccess") {
+                        GetPartiesList();
+                        ResetParties();
+                        $('#AddpartyModelPopup').modal('toggle')
+                        alertify.success('Party Added Succesfully');
+                    }
+                    else {
+                        alertify.error("Error Try Again Latter")
+                    }
+
+                },
+            });
+        }
+
+    })
+
+    //Delete Parties
+    $(document).on('click', '#DeletePartiesBtn', function () {
+        var partyid = $(this).data('id');
+
+
+        alertify.confirm('Delete Confirmation', 'Are you sure you want to delete this Party?',
+            function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Dashbord/DeleteParties?Id=' + partyid,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            GetPartiesList();
+                            alertify.success('Party deleted successfully!');
+
+                        } else {
+                            alertify.error("Failed to delete Party: " + response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alertify.error('There was an error deleting the party: ' + error);
+                        console.log(xhr.responseText);
+                    }
+                });
+            },
+            function () {
+                alertify.error('Delete action canceled.');
+            });
+    });
+
+    //Edit Party
+    $(document).on('click', '#EditPartyBtn', function () {
+
+        var partyid = $(this).data('id');
+
+        var row = $(this).closest('tr');
+
+        var Name = row.find('td:eq(2)').text();
+        var Gst = row.find('td:eq(3)').text();
+        var Mobile = row.find('td:eq(4)').text();
+        var Email = row.find('td:eq(5)').text();
+        var Address = row.find('td:eq(6)').text();
+        var Store = row.find('td:eq(7)').text();
+
+
+        $('#AddpartyModelPopup').modal('toggle')
+        $('#PartyModelPopupLabl').text('Update Party')
+        $('#SubmitParty').text('Update')
+
+
+
+        $('#partiesidinput').val(partyid);
+        $('#Partyname').val(Name);
+        $('#PartyGstNo').val(Gst);
+        $('#PartyPhoneNo').val(Mobile);
+        $('#PartyEmail').val(Email);
+        $('#PartyAddress').val(Address);
+        $('#PartyStoreName').val(Store);
+
+
+    })
+
+    //Get Gst Number on Party Change 
+    $(document).on('change', '#ItmSelectParty', function () {
+        var selectedPartyId = $(this).val();
+        if (selectedPartyId) {
+            $.ajax({
+                type: 'GET',
+                url: '/Dashbord/GetGstNumber',
+                data: { partid: selectedPartyId },
+                cache: false,
+                success: function (response) {
+
+                    if (response.length > 0) {
+                        $('#ItmSelectGstNo').val(response);
+                    }
+                    else {
+                        alertify.error('Gst Number Not Found')
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error: " + error);
+                }
+            });
+        } else {
+            $('#gstNumber').val(''); // Clear the field if no party is selected
+        }
+    });
+
+
+    //Sale Item Index 
+    $(document).on('click', '#SaleitemPopup', function () {
+
+        $.ajax({
+            type: 'GET',
+            url: '/Dashbord/_SaleIndex',
+            cache: false,
+            success: function (response) {
+                $('#AddCategoryPopup').empty();
+                $('#AddCategoryPopup').html(response);
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error: " + error);
+            }
+        });
+    })
+
+    //Submint Customer post
+    $(document).on('click', '#SaveCustomer', function () {
+        var customerData = {
+            Customer_Id: $('#customerid').val(),
+            Cust_Name: $('#Cust_Name').val(),
+            Cust_Mobile_No: $('#Cust_MobileNo').val(),
+            Cust_Email: $('#Cust_Email').val(),
+            Cust_City: $('#Cust_City').val(),
+            Cust_Gstin_No: $('#Cust_Gstnumber').val()
+        };
+        debugger;
+        if (CustomerFormValidation()) {
+            $.ajax({
+                type: 'POST',
+                url: '/Dashbord/AddCustomer',
+                contentType: 'application/json',
+                data: JSON.stringify(customerData),
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success('Customer Addes Successfully')
+                    }
+                    else {
+                        alertify.error('Customer Allredy Exit')
+                    }
+                    //if (response == "Updatesuccess") {
+                    //    GetPartiesList();
+                    //    alertify.success('Party Updated Succesfully');
+                    //    ResetParties();
+                    //    $('#AddpartyModelPopup').modal('toggle')
+                    //}
+                    //else if (response == "NotUpdate") {
+                    //    alertify.error('Party Not Updated');
+                    //}
+
+                    //else if (response == "AlredyExit") {
+                    //    alertify.error('Parties Alredy Exit Please Ensure Details');
+                    //    $('#PartyPhoneNo').css("border", "1.5px solid red");
+                    //    $('#PartyEmail').css("border", "1.5px solid red");
+                    //}
+                    //else if (response == "AddSuccess") {
+                    //    GetPartiesList();
+                    //    ResetParties();
+                    //    $('#AddpartyModelPopup').modal('toggle')
+                    //    alertify.success('Party Added Succesfully');
+                    //}
+                    //else {
+                    //    alertify.error("Error Try Again Latter")
+                    //}
+
+                },
+            });
+        }
+
+    })
 })
-
-
-
-
-
 
 
 
@@ -583,7 +864,7 @@
 function fetchItems(subProductDropdownId, itemDropdownId) {
     $(document).on('change', subProductDropdownId, function () {
         var SubProductId = $(this).val();
-        debugger;
+
         if (SubProductId > 0) {
             $.ajax({
                 type: 'GET',
@@ -616,14 +897,14 @@ function fetchItems(subProductDropdownId, itemDropdownId) {
 
 
 //DDl Category Itm
-function DDlCategory(dropdownId) {
-    debugger;
+function DDlCategory(ProductId) {
+
     $.ajax({
         type: 'GET',
         url: '/Dashbord/DDlCategory',
         cache: false,
         success: function (response) {
-            var $dropdown = $(dropdownId);
+            var $dropdown = $(ProductId);
             $dropdown.empty();
             $dropdown.append('<option value="">--Select Category--</option>');
 
@@ -642,9 +923,10 @@ function DDlCategory(dropdownId) {
 }
 
 //DDl Sub Product 
-function fetchSubProducts(categoryDropdownId, subProductDropdownId) {
-    debugger;
-    $(document).on('change', categoryDropdownId, function () {
+
+function fetchSubProducts(CategoryDDL, SubProductDDL) {
+
+    $(document).on('change', CategoryDDL, function () {
         var CategoryId = $(this).val();
         if (CategoryId > 0) {
             $.ajax({
@@ -653,7 +935,7 @@ function fetchSubProducts(categoryDropdownId, subProductDropdownId) {
                 data: { CategoryId: CategoryId },
                 cache: false,
                 success: function (response) {
-                    var $subProductDropdown = $(subProductDropdownId);
+                    var $subProductDropdown = $(SubProductDDL);
                     $subProductDropdown.empty();
                     $subProductDropdown.append('<option value="">--Select Sub Product--</option>');
 
@@ -676,11 +958,31 @@ function fetchSubProducts(categoryDropdownId, subProductDropdownId) {
 }
 
 
+//Ddl Parties
+function DDlParties() {
+    debugger
+    $.ajax({
+        type: 'GET',
+        url: '/Dashbord/DDlParties',
+        cache: false,
+        success: function (response) {
+            var $dropdown = $("#ItmSelectParty");
+            $dropdown.empty();
+            $dropdown.append('<option value="">--Select Party--</option>');
 
-
-
-
-
+            if (response && response.length > 0) {
+                $.each(response, function (index, item) {
+                    $dropdown.append('<option value="' + item.value + '">' + item.text + '</option>');
+                });
+            } else {
+                $dropdown.append('<option value="">No Subproducts Found</option>');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error: " + error);
+        }
+    });
+}
 
 
 
@@ -745,19 +1047,43 @@ function GetSubProductList() {
 
 //Stock Item List
 function GetStocklist() {
-    debugger;
+
     $.ajax({
         type: 'GET',
         url: '/dashbord/_GetStockList',
         cache: false,
         success: function (response) {
-            debugger;
+
             $('#StockItmTblList').html(response);
         },
         error: function (xhr, status, error) {
             console.log('Error: ' + error);
         }
     });
+}
+
+//Parties List
+function GetPartiesList() {
+
+    $.ajax({
+        type: 'GET',
+        url: '/Dashbord/_GetPartyList',
+        cache: false,
+        success: function (response) {
+            if (response.length > 0) {
+
+                $('#PartiesListShow').html(response);
+            }
+            else {
+                alertify.error('Parties lISt Not  Found')
+            }
+        },
+        error: function (xhr, status, error) {
+
+            console.log("Error: " + error);
+        }
+    });
+
 }
 
 //-----------------List Get Code Here--^^^^^^^----------------------------
@@ -787,6 +1113,69 @@ function GetStocklist() {
 
 
 
+//Add Customer Validation
+function CustomerFormValidation() {
+    let isValid = true;
+
+    // Reset previous error messages and borders
+    $(".error").remove();
+    $("input").css("border", "");
+
+    // Validate Customer Name
+    const customerName = $("#Cust_Name").val();
+    if (customerName.length < 3 || customerName.length > 50) {
+        $("#Cust_Name").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Customer name should be between 3 and 50 characters');
+        isValid = false;
+    } else {
+        $("#Cust_Name").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate Phone Number
+    const phoneNumber = $("#Cust_MobileNo").val();
+    const phoneRegex = /^[6-9]\d{9}$/; // Indian phone number format
+    if (!phoneRegex.test(phoneNumber)) {
+        $("#Cust_MobileNo").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please enter a valid phone number');
+        isValid = false;
+    } else {
+        $("#Cust_MobileNo").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate Customer Email
+    const customerEmail = $("#Cust_Email").val();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(customerEmail)) {
+        $("#Cust_Email").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please enter a valid email address');
+        isValid = false;
+    } else {
+        $("#Cust_Email").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate City
+    const city = $("#Cust_City").val();
+    if (city.length < 3) {
+        $("#Cust_City").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please enter a valid city name');
+        isValid = false;
+    } else {
+        $("#Cust_City").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Gstin Number is optional, but validate format if provided
+    //const gstinNumber = $("#Cust_Gstnumber").val();
+    //const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{3}$/;
+    //if (gstinNumber && !gstinRegex.test(gstinNumber)) {
+    //    $("#Cust_Gstnumber").css("border", "1.5px solid rgb(255, 0, 0)");
+    //    alertify.error('Please enter a valid GSTIN number');
+    //    isValid = false;
+    //} else if (gstinNumber) {
+    //    $("#Cust_Gstnumber").css("border", "1.5px solid rgb(122, 245, 71)");
+    //}
+
+    return isValid;
+}
 
 
 
@@ -794,7 +1183,7 @@ function GetStocklist() {
 //Add Product Category Validaton
 function EditProductvalidatoin() {
     let isValid = true;
-    debugger;
+
     // Reset previous error messages and borders
     $(".error").remove();
     $("input").css("border", "");
@@ -881,7 +1270,7 @@ function Update_Sub_Productvalidatoin() {
 //Add Product Caegory Validaton
 function AddProductvalidatoin() {
     let isValid = true;
-    debugger;
+
     // Reset previous error messages and borders
     $(".error").remove();
     $("input").css("border", "");
@@ -906,6 +1295,28 @@ function Add_Item_Productvalidatoin() {
     // Reset previous error messages and borders
     $(".error").remove();
     $("input, select").css("border", "");
+
+    //party valiadatiom
+    const partyName = $("#ItmSelectParty").val();
+    if (partyName === "" || partyName === "--Select Party--") {
+        $("#ItmSelectParty").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please select a Party');
+        isValid = false;
+    } else {
+        $("#ItmSelectParty").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    //Gt valiadatiom
+    const Gst = $("#ItmSelectGstNo").val();
+    if (Gst === "" || Gst === "--Select Party--") {
+        $("#ItmSelectGstNo").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please select a Party');
+        isValid = false;
+    } else {
+        $("#ItmSelectGstNo").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+
 
     // Validate Category
     const category = $("#ItmSelectCateAdd").val();
@@ -980,14 +1391,14 @@ function Add_Item_Productvalidatoin() {
     }
 
     // Validate Expiry Date
-    const expiryDate = $("#ItmExpiryDate").val();
-    if (expiryDate == "") {
-        $("#ItmExpiryDate").css("border", "1.5px solid rgb(255, 0, 0)");
-        alertify.error('Please select an expiry date');
-        isValid = false;
-    } else {
-        $("#ItmExpiryDate").css("border", "1.5px solid rgb(122, 245, 71)");
-    }
+    //const expiryDate = $("#ItmExpiryDate").val();
+    //if (expiryDate == "") {
+    //    $("#ItmExpiryDate").css("border", "1.5px solid rgb(255, 0, 0)");
+    //    alertify.error('Please select an expiry date');
+    //    isValid = false;
+    //} else {
+    //    $("#ItmExpiryDate").css("border", "1.5px solid rgb(122, 245, 71)");
+    //}
 
     return isValid;
 }
@@ -1042,7 +1453,7 @@ function ItemSearchValidation() {
 
 function customValidateLoginForm() {
     let isValid = true;
-    debugger;
+
     // Reset previous error messages and borders
     $(".error").remove();
     $("input").css("border", "");
@@ -1074,7 +1485,7 @@ function customValidateLoginForm() {
 //Registration vAlidation
 function customValidateForm() {
     let isValid = true;
-    debugger;
+
     // Reset previous error messages and borders
     $(".error").remove();
     $("input").css("border", "");
@@ -1136,13 +1547,91 @@ function customValidateForm() {
     return isValid;
 }
 
+//Add Party Validation 
+function AddPartyValidation() {
+    let isValid = true;
+
+    // Reset previous error messages and borders
+    $(".error").remove();
+    $("input").css("border", "");
+
+    // Validate Party Name (e.g., minimum 3 characters)
+    const partyName = $("#Partyname").val();
+    if (partyName.length < 3) {
+        $("#Partyname").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Party Name must be at least 3 characters long');
+        isValid = false;
+    } else {
+        $("#Partyname").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate GST Number (e.g., must be exactly 15 characters)
+    const gstNo = $("#PartyGstNo").val();
+    if (gstNo.length !== 15) {
+        $("#PartyGstNo").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('GST Number must be exactly 15 characters long');
+        isValid = false;
+    } else {
+        $("#PartyGstNo").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate Phone Number (e.g., must be 10 digits)
+    const phoneNo = $("#PartyPhoneNo").val();
+    const phonePattern = /^[6-9]\d{9}$/;
+
+    if (!phonePattern.test(phoneNo)) {
+        $("#PartyPhoneNo").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Mobile Number incorret formate and be exactly 10 digits long');
+        isValid = false;
+    } else {
+        $("#PartyPhoneNo").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+
+    // Validate Email (e.g., simple email pattern)
+    const email = $("#PartyEmail").val();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        $("#PartyEmail").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Please enter a valid email address');
+        isValid = false;
+    } else {
+        $("#PartyEmail").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate Address (e.g., minimum 5 characters)
+    const address = $("#PartyAddress").val();
+    if (address.length < 5) {
+        $("#PartyAddress").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Address must be at least 5 characters long');
+        isValid = false;
+    } else {
+        $("#PartyAddress").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    // Validate Store Name (e.g., minimum 3 characters)
+    const storeName = $("#PartyStoreName").val();
+    if (storeName.length < 3) {
+        $("#PartyStoreName").css("border", "1.5px solid rgb(255, 0, 0)");
+        alertify.error('Store Name must be at least 3 characters long');
+        isValid = false;
+    } else {
+        $("#PartyStoreName").css("border", "1.5px solid rgb(122, 245, 71)");
+    }
+
+    return isValid;
+}
+
 function restAll() {
-    $('#ItmSelectCateAdd').val('');
-    $('#ItmSelectSub').val('');
-    $('#ItmName').val('');
-    $('#ItmSrNumber').val('');
-    $('#ItmQuntity').val('');
-    $('#ItmPrice').val('');
-    $('#ItmSellingPrice').val('');
-    $('#ItmExpiryDate').val('');
+    $('#ItmSelectParty, #ItmSelectGstNo, #ItmSelectCateAdd, #ItmSelectSub, #ItmName, #ItmSrNumber, #ItmQuntity, #ItmPrice, #ItmSellingPrice, #ItmExpiryDate').val('').css('border', '');
+
 };
+//Clear Parties Form
+function ResetParties() {
+    $('#Partyname').val('');
+    $('#PartyGstNo').val('');
+    $('#PartyPhoneNo').val('');
+    $('#PartyEmail').val('');
+    $('#PartyAddress').val('');
+    $('#PartyStoreName').val('');
+}

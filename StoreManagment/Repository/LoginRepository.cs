@@ -328,21 +328,60 @@ namespace StoreManagment.Repository
         //Add Item  Post Method -------------------
         public int AddItem(Add_ItemModel model)
         {
-            if (model != null)
+            try
             {
-                model.CreatedDate = DateTime.Now;
-                model.UpdatedDate = null;
 
-                DB.Tbl_AddItem.Add(model);
-                DB.SaveChanges();  // Pehle item ko save karte hain taaki iska Id generate ho jaye
+                if (model.ItemId > 0)
+                {
+                    var item = DB.Tbl_AddItem.Find(model.ItemId);
+                    if (item != null)
+                    {
+                        //var img = DB.Tbl_AddItem.Where(x => x.ItemId == model.ItemId).Select(x => x.Image).FirstOrDefault();
 
-                return model.ItemId; // Item ka ID return karte hain taaki image upload ke process mein use ho
+                        // Updating the existing item
+                        item.Item_Name = model.Item_Name;
+                        item.Item_SerialNumber = model.Item_SerialNumber;
+                        item.Item_Quantity = model.Item_Quantity;
+                        item.Gst_No = model.Gst_No;
+                        item.PartyId = model.PartyId;
+                        item.P_Id = model.P_Id;
+                        item.S_P_Id = model.S_P_Id;
+                        item.Item_Expiry_Date = model.Item_Expiry_Date;
+                        item.Image = model.Image;
+                        item.Item_Price = model.Item_Price;
+                        item.Item_Selling_Price = model.Item_Selling_Price;
+                        item.UpdatedDate = DateTime.Now;
+
+                        DB.SaveChanges();
+                        return 4;
+
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    model.CreatedDate = DateTime.Now;
+                    model.UpdatedDate = null;
+
+                    DB.Tbl_AddItem.Add(model);
+                    DB.SaveChanges();
+
+                    return model.ItemId;
+                }
+
+
+
             }
-            else
+            catch (Exception ex)
             {
-                return 0;  // Agar model null hai toh ID 0 return karein, jo ki failure indicate karega
+                Console.WriteLine("Error: " + ex.Message);
+                return 0;
             }
         }
+
 
         public Add_ItemVM? SearchItem(Add_ItemModel model)
         {
@@ -371,8 +410,8 @@ namespace StoreManagment.Repository
                     UpdatedDate = ItemSearch.UpdatedDate,
                     ProductCategory = ItemSearch.AddProduct?.Product_Category,
                     SubProduct = ItemSearch.Add_Sub_ProductModel?.Sub_Product_Name,
-                    Image= ItemSearch.Image
-                    
+                    Image = ItemSearch.Image
+
                 };
 
                 return itemData;
@@ -382,15 +421,19 @@ namespace StoreManagment.Repository
 
         //Stock Item List
         public List<Add_ItemVM> Stocklist()
+
         {
-            var stockItems = DB.Tbl_AddItem.Include(x => x.AddProduct).Include(x => x.Add_Sub_ProductModel).ToList();
+            var stockItems = DB.Tbl_AddItem.Include(x => x.AddProduct).Include(x => x.Add_Sub_ProductModel).Include(x => x.PartiesModel).ToList();
 
             var itemViewModels = stockItems.Select(item => new Add_ItemVM
             {
                 ItemId = item.ItemId,
-                //P_Id = item.P_Id,
-                //S_P_Id = item.S_P_Id,
+                P_Id = item.P_Id,
+                S_P_Id = item.S_P_Id,
+                Party_Id = item.PartyId ?? 0, // Agar PartyId null hai to 0 set kare
                 Item_Name = item.Item_Name,
+                partyName = item.PartiesModel?.PartyName,
+                Gst_No = item.PartiesModel?.GstNo,
                 Item_SerialNumber = item.Item_SerialNumber,
                 Item_Quantity = item.Item_Quantity,
                 Item_Price = item.Item_Price,
@@ -429,6 +472,128 @@ namespace StoreManagment.Repository
 
 
 
+        //Add Parties
+        public string AddParties(PartiesModel model)
+        {
+            //var partyEmail = DB.Tbl_AddParties.Where(x => x.Email == model.Email || x.PhoneNo == model.PhoneNo).FirstOrDefault();
+            //if (partyEmail != null)
+            //{
+            //    return "AlredyExit";
+            //}
+
+            if (model.PartyId > 0)
+            {
+                var party = DB.Tbl_AddParties.Where(x => x.PartyId == model.PartyId).FirstOrDefault();
+
+
+                if (party != null)
+                {
+                    party.PartyName = model.PartyName;
+                    party.GstNo = model.GstNo;
+                    party.PhoneNo = model.PhoneNo;
+                    party.Email = model.Email;
+                    party.Address = model.Address;
+                    party.StoreName = model.StoreName;
+                    party.UpdatedDate = DateTime.Now;
+
+                    // Saving the updated party
+                    DB.Tbl_AddParties.Update(party);
+                    DB.SaveChanges();
+
+                    return "Updatesuccess";
+                }
+                else
+                {
+                    return "NotUpdate";
+                }
+
+            }
+            else
+            {
+
+                model.CreatedDate = DateTime.Now;
+                model.UpdatedDate = null;
+                DB.Tbl_AddParties.Add(model);
+                DB.SaveChanges();
+                return "AddSuccess";
+
+
+            }
+
+        }
+
+        //Get Parties List
+        public List<AddPartiesVM> GetPartiesList()
+        {
+            var PartiesList = DB.Tbl_AddParties.ToList();
+            var SubproductVM = PartiesList.Select(p => new AddPartiesVM
+            {
+                PartyId = p.PartyId,
+                PartyName = p.PartyName,
+                GstNo = p.GstNo,
+                Email = p.Email,
+                PhoneNo = p.PhoneNo,
+                Address = p.Address,
+                StoreName = p.StoreName,
+                CreatedDate = p.CreatedDate,
+                UpdatedDate = p.UpdatedDate,
+
+            }).ToList();
+            return SubproductVM;
+        }
+
+        //delete Parties
+        public bool DeleteParties(int Id)
+        {
+            var party = DB.Tbl_AddParties.Find(Id);
+            if (party != null)
+            {
+                DB.Tbl_AddParties.Remove(party);
+                DB.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        //Add Customer
+        public bool AddCustomer(CustomerModel model)
+        {
+            var chekcustomer = DB.Tbl_Customer.Where(x => x.Cust_Mobile_No == model.Cust_Mobile_No || x.Cust_Email == model.Cust_Email).FirstOrDefault();
+            if (chekcustomer != null)
+            {
+                return false;
+            }
+            else
+            {
+                model.Created_Date = DateTime.Now;
+                model.Updated_Date = null;
+                DB.Tbl_Customer.Add(model);
+                DB.SaveChanges();
+                return true;
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //Get Item List Form Search Item DDl
         public List<SelectListItem> GetItemsList(int SubProductId)
@@ -449,8 +614,6 @@ namespace StoreManagment.Repository
 
             return items;
         }
-
-
         //Get Sub Product DDl----------------
         public List<SelectListItem> GetSubDDl(int CategoryId)
         {
@@ -471,8 +634,7 @@ namespace StoreManagment.Repository
             return subcategories;
         }
 
-
-        //get DDl Category----------------
+        //get DDl Category-
         public List<SelectListItem> DDLGetAllCategories()
         {
             var categories = DB.Tbl_Add_Product.Select(x => new SelectListItem
@@ -482,6 +644,32 @@ namespace StoreManagment.Repository
             }).ToList();
 
             return categories;
+        }
+
+        // Parties DDl __-
+        public List<SelectListItem> GetPartiesDDl()
+        {
+            var parties = DB.Tbl_AddParties.Select(x => new SelectListItem
+            {
+                Value = x.PartyId.ToString(),
+                Text = x.PartyName
+            }).ToList();
+
+            return parties;
+        }
+
+        public string GetGstNo(int partyid)
+        {
+            var GstNo = DB.Tbl_AddParties.Where(x => x.PartyId == partyid).Select(x => x.GstNo).FirstOrDefault();
+
+            if (GstNo != null)
+            {
+                return GstNo.ToString();
+            }
+            else
+            {
+                return "";  // Return empty string if GST number is not found
+            }
         }
 
 

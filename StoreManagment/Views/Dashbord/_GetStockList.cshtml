@@ -2,7 +2,7 @@
 
 <style>
     .compact-table {
-        font-size: 15px;
+        font-size: 12px;
     }
 
         .compact-table th, .compact-table td {
@@ -11,8 +11,6 @@
         }
 
 </style>
-
-
 <section class="section mt-5">
     <div class="row">
         <div class="col-lg-12">
@@ -20,13 +18,15 @@
                 <div class="card-body">
                     <div class="row">
                         <b style="color:forestgreen;">Items Stock  List</b>
-                        <table class="table table-hover table-responsive  compact-table" id="ItemTable">
+                        <table class="table table-bordered table-hover table-responsive  compact-table" id="ItemTable">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
                                     <th>Item</th>
                                     <th>Sub-Prod.</th>
                                     <th>Cat.</th>
+                                    <th>Party</th>
+                                    <th>Gst No.</th>
                                     <th>Serial-No</th>
                                     <th>Qty</th>
                                     <th>Price</th>
@@ -48,24 +48,32 @@
                                     <tr>
                                         <td>@recordNumber</td>
                                         <td hidden>@Html.DisplayFor(modelItem => item.ItemId)</td>
+                                        <td hidden>@Html.DisplayFor(modelItem => item.S_P_Id)</td>
+                                        <td hidden>@Html.DisplayFor(modelItem => item.P_Id)</td>
+
                                         <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.Item_Name)</td>
                                         <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.SubProduct)</td>
                                         <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.ProductCategory)</td>
+                                        <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.partyName)</td>
+                                        <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.Gst_No)</td>
+
                                         <td>@Html.DisplayFor(modelItem => item.Item_SerialNumber)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Item_Quantity)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Item_Price)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Item_Selling_Price)</td>
-                                        <td>@item.Item_Expiry_Date?.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.Item_Expiry_Date?.ToString("yyyy-MM-dd")</td>
+
+                                        <td hidden>@Html.DisplayFor(modelItem => item.Party_Id)</td>
                                         @*<td> <img src="@item.Image" alt="Item Image" style="max-width: 100px; max-height: 100px;" /></td>*@
-                                        <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
-                                        <td>@item.UpdatedDate?.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.CreatedDate?.ToString("yyyy-MM-dd")</td>
+                                        <td>@item.UpdatedDate?.ToString("yyyy-MM-dd")</td>
                                         <td>
                                             <button class="btn btn-outline-danger btn-sm" data-id="@item.ItemId" id="Stock_ItmDeleteBtn">
                                                 <i class="bi bi-trash3"></i>
                                             </button>
                                         </td>
                                         <td>
-                                            <button class="btn btn-outline-success btn-sm" data-id="@item.ItemId">
+                                            <button class="btn btn-outline-success btn-sm" data-id="@item.ItemId" id="EditItemBtn">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                         </td>

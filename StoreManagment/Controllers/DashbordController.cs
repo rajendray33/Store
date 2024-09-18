@@ -325,14 +325,13 @@ namespace StoreManagment.Controllers
 
         //Add Stock Item Post
         [HttpPost("_AddStockIteams")]
-        [HttpPost]
         public async Task<IActionResult> _AddStockIteams([FromForm] Add_ItemVM model, IFormFile? Item_Image)
         {
             if (ModelState.IsValid)
             {
                 string? imagePath = null;
 
-                // Handle the file upload if there is an image
+
                 if (Item_Image != null && Item_Image.Length > 0)
                 {
                     var fileName = Path.GetFileName(Item_Image.FileName);
@@ -349,6 +348,9 @@ namespace StoreManagment.Controllers
                 // Create model object
                 Add_ItemModel mdl = new Add_ItemModel()
                 {
+                    ItemId = model.ItemId,
+                    PartyId = model.Party_Id,
+                    Gst_No = model.Gst_No,
                     P_Id = model.P_Id,
                     S_P_Id = model.S_P_Id,
                     Item_Name = model.Item_Name,
@@ -362,7 +364,10 @@ namespace StoreManagment.Controllers
 
                 // Save item
                 var itemId = repository.AddItem(mdl);
-
+                if (itemId == 4)
+                {
+                    return Json("Updated");
+                }
                 if (itemId > 0)
                 {
                     return Json(new { success = true, itemId });
@@ -378,7 +383,13 @@ namespace StoreManagment.Controllers
             }
         }
 
-
+        //Stock Item List
+        [HttpGet("_GetStockList")]
+        public IActionResult _GetStockList()
+        {
+            var productList = repository.Stocklist(); // Yeh method database se product list la raha hai
+            return PartialView(productList);
+        }
 
 
 
@@ -449,89 +460,205 @@ namespace StoreManagment.Controllers
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Stock Item List
-        [HttpGet("_GetStockList")]
-        public IActionResult _GetStockList()
+        //Party Index
+        [HttpGet("_PartyView")]
+        public IActionResult _PartyView()
         {
-            var productList = repository.Stocklist(); // Yeh method database se product list la raha hai
-            return PartialView(productList);
+            return PartialView();
         }
 
-       
+
+        //Party Add Post
+        [HttpPost("_PartyView")]
+        public IActionResult _PartyView([FromBody] AddPartiesVM model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var partymodel = new PartiesModel
+                {
+                    PartyId = model.PartyId,
+                    PartyName = model.PartyName,
+                    GstNo = model.GstNo,
+                    PhoneNo = model.PhoneNo,
+                    Email = model.Email,
+                    Address = model.Address,
+                    StoreName = model.StoreName
+                };
+
+
+                var parties = repository.AddParties(partymodel);
+
+                if (parties == "Updatesuccess")
+                {
+                    return Json("Updatesuccess");
+                }
+                else if (parties == "NotUpdate")
+                {
+                    return Json("NotUpdate");
+                }
+                else if (parties == "AlredyExit")
+                {
+                    return Json("AlredyExit");
+                }
+                else if (parties == "AddSuccess")
+                {
+                    return Json("AddSuccess");
+                }
+
+                else
+                {
+                    return Json("Error");
+                }
+            }
+            else
+            {
+                return Json("Invalidmoelstate");
+            }
+        }
+
+        //Parties List Get
+        [HttpGet("_GetPartyList")]
+        public IActionResult _GetPartyList()
+        {
+            var partylist = repository.GetPartiesList();
+            return PartialView(partylist);
+        }
+
+        //Delete Parties
+        [HttpPost("DeleteParties")]
+        public IActionResult DeleteParties(int Id)
+        {
+
+            if (Id > 0)
+            {
+                var party = repository.DeleteParties(Id);
+                if (party == true)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+
+        }
+
+
+
+        //Product sale Index
+        [HttpGet("_SaleIndex")]
+        public IActionResult _SaleIndex()
+        {
+            return PartialView();
+        }
+
+
+        //Add Customer Post
+        [HttpPost("AddCustomer")]
+        public IActionResult AddCustomer([FromBody] CustomerVm model)
+        {
+            if (ModelState.IsValid)
+            {
+                var modeldata = new CustomerModel()
+                {
+                    Customer_Id = model.Customer_Id,
+                    Cust_Name = model.Cust_Name,
+                    Cust_Mobile_No = model.Cust_Mobile_No,
+                    Cust_City = model.Cust_City,
+                    Cust_Email = model.Cust_Email,
+                    Cust_Gstin_No = model.Cust_Gstin_No
+
+                };
+                var customer = repository.AddCustomer(modeldata);
+                if (customer == true)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -569,7 +696,46 @@ namespace StoreManagment.Controllers
             }
         }
 
+        //DDl parties
+        [HttpGet("DDlParties")]
+        public JsonResult DDlParties()
+        {
+            var Parties = repository.GetPartiesDDl();
 
+            if (Parties != null)
+            {
+                return new JsonResult(Parties);
+            }
+            else
+            {
+                return Json("Null");
+            }
+
+        }
+
+        //Get Gst Number
+        [HttpGet("GetGstNumber")]
+        public JsonResult GetGstNumber(int partid)
+        {
+            if (partid > 0)
+            {
+                var gstNo = repository.GetGstNo(partid);
+
+                if (gstNo != null)
+                {
+                    return new JsonResult(gstNo);
+                }
+                else
+                {
+                    return Json("null");
+                }
+            }
+            else
+            {
+                return Json("null");
+            }
+
+        }
 
         //Get Caategory For Item Json Action
         [HttpGet("_SubproductListItm")]
@@ -584,6 +750,14 @@ namespace StoreManagment.Controllers
         {
             var getddlcategory = repository.DDLGetAllCategories();
             return new JsonResult(getddlcategory);
+        }
+
+
+
+        [HttpGet("test")]
+        public IActionResult test()
+        {
+            return View();
         }
     }
 }

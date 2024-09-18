@@ -22,10 +22,8 @@
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
     @*Jquery Data Table Css*@
-    <link href="~/datatables.net-dt/css/datatables.datatables.min.css" rel="stylesheet" />
-
+    <link href="~/datatables/datatables.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/StoreCss.css" asp-append-version="true" />
 
     <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" asp-append-version="true" rel="stylesheet" />
@@ -36,8 +34,9 @@
     <link href="~/assets/vendor/quill/quill.snow.css" rel="stylesheet" asp-append-version="true">
     <link href="~/assets/vendor/quill/quill.bubble.css" rel="stylesheet" asp-append-version="true">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+    <link href="~/alertifyjs/css/alertify.min.css" rel="stylesheet" />
+    <link href="~/alertifyjs/css/themes/default.min.css" rel="stylesheet" />
+
     <!-- Template Main CSS File -->
     @*<link href="~assets/css/style.css" rel="stylesheet">*@
     <link href="~/assets/css/style.css" rel="stylesheet" asp-append-version="true">
@@ -279,12 +278,21 @@
     <aside id="sidebar" class="sidebar">
 
         <ul class="sidebar-nav" id="sidebar-nav">
+
             @*Data Entry Forms*@
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-journal-text"></i><span>Product Entry</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
+
+                    <li>
+                        <a href="javascript:void(0)" class="disable-link" id="AddParty">
+                            <i class="bi bi-circle"></i><span>Add Party</span>
+                        </a>
+
+                    </li>
 
                     <li>
                         <a href="javascript:void(0)" class="disable-link" id="AddProductPopUp">
@@ -300,30 +308,40 @@
                     </li>
 
                     <li>
-                        <a href="javascript:void(0)" class="disable-link" id="AddIteamPopup">
+                        <a href="javascript:void(0)" class="disable-link" id="AddItmIndex">
                             <i class="bi bi-circle"></i><span>Add Stock Iteams</span>
                         </a>
                     </li>
 
                 </ul>
             </li><!-- End Forms Nav -->
-@*
+
+
+            @*Sale item*@
             <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+                <a href="javascript:void(0)" class="nav-link collapsed disable-link" id="SaleitemPopup" tabindex="-1" aria-disabled="true">
+                    <i class="bi bi-cart4"></i><span>Sale Items</span>
                 </a>
-                <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="tables-data.html">
-                            <i class="bi bi-circle"></i><span>General Tables</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a asp-action="Datatable" asp-controller="Dashbord">
-                            <i class="bi bi-circle"></i><span>Data Tables</span>
-                        </a>
-                    </li>
-                </ul>
+            </li>
+
+            <!-- End Contact Page Nav -->
+            @*
+            <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <li>
+            <a href="tables-data.html">
+            <i class="bi bi-circle"></i><span>General Tables</span>
+            </a>
+            </li>
+            <li>
+            <a asp-action="Datatable" asp-controller="Dashbord">
+            <i class="bi bi-circle"></i><span>Data Tables</span>
+            </a>
+            </li>
+            </ul>
             </li><!-- End Tables Nav -->
 
 
@@ -331,43 +349,38 @@
             <li class="nav-heading">Pages</li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="users-profile.html">
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
+            <a class="nav-link collapsed" href="users-profile.html">
+            <i class="bi bi-person"></i>
+            <span>Profile</span>
+            </a>
             </li><!-- End Profile Page Nav -->
 
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" tabindex="-1" aria-disabled="true">
-                    <i class="bi bi-envelope"></i>
-                    <span>Contact</span>
-                </a>
-            </li><!-- End Contact Page Nav -->
+
 
 
             <li class="nav-item">
-                <a class="nav-link collapsed  disabled" href="pages-register.html">
-                    <i class="bi bi-card-list"></i>
-                    <span>Register</span>
-                </a>
+            <a class="nav-link collapsed  disabled" href="pages-register.html">
+            <i class="bi bi-card-list"></i>
+            <span>Register</span>
+            </a>
             </li><!-- End Register Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="pages-login.html">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Login</span>
-                </a>
+            <a class="nav-link collapsed" href="pages-login.html">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span>Login</span>
+            </a>
             </li><!-- End Login Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed disabled" href="pages-error-404.html">
-                    <i class="bi bi-dash-circle"></i>
-                    <span>Error 404</span>
-                </a>
+            <a class="nav-link collapsed disabled" href="pages-error-404.html">
+            <i class="bi bi-dash-circle"></i>
+            <span>Error 404</span>
+            </a>
             </li><!-- End Error 404 Page Nav -->
-*@
 
+            *@
         </ul>
 
     </aside><!-- End Sidebar-->
@@ -384,8 +397,8 @@
 
 
     <footer id="footer" class="footer">
-      @*  <div class="copyright">
-            &copy; Copyright <strong><span>Khushiram Yadav</span></strong>. All Rights Reserved
+        @*  <div class="copyright">
+        &copy; Copyright <strong><span>Khushiram Yadav</span></strong>. All Rights Reserved
         </div>*@
     </footer><!-- End Footer -->
     <!-- Vendor JS Files -->
@@ -393,14 +406,16 @@
     <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
     <script src="~/assets/vendor/quill/quill.js" asp-append-version="true"></script>
     @*Jquery DataTable JS*@
-    <script src="~/datatables.net-dt/js/datatables.datatables.min.js"></script>
+    <script src="~/datatables/datatables.min.js"></script>
 
     <script src="~/assets/vendor/tinymce/tinymce.min.js" asp-append-version="true"></script>
     <script src="~/assets/vendor/php-email-form/validate.js" asp-append-version="true"></script>
     <script src="~/js/StoreJS.js" asp-append-version="true"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
-    <script src="~/assets/js/main.js"></script>
 
+    <script src="~/alertifyjs/alertify.min.js"></script>
+
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/datatables/datatables.min.js"></script>
 </body>
 </html>
 

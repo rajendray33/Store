@@ -1,0 +1,66 @@
+﻿@model IEnumerable<StoreManagment.ViewModel.AddPartiesVM>
+
+
+
+<style>
+    #PartiesTbl {
+        font-size: 12px;
+    }
+
+        #PartiesTbl th, #PartiesTbl td {
+            min-width: 100%;
+            padding: 10px 5px;
+        }
+
+</style>
+<div class="row">
+    <b style="color:forestgreen;">Items Stock  List</b>
+    <table class="table table-hover table-bordered table-responsive  Parties-table" id="PartiesTbl">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Gst No</th>
+                <th>Mobile No</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Store Name</th>
+                <th>Add Dt.</th>
+                <th>Upd. Dt.</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int recordNumber = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@recordNumber</td>
+                    <td hidden>@Html.DisplayFor(modelItem => item.PartyId)</td>
+
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.PartyName)</td>
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.GstNo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PhoneNo)</td>
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.Email)</td>
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.Address)</td>
+                    <td style="text-transform: capitalize;">@Html.DisplayFor(modelItem => item.StoreName)</td>
+                    <td>@item.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.UpdatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" data-id="@item.PartyId" id="DeletePartiesBtn">
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success btn-sm" data-id="@item.PartyId" id="EditPartyBtn">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                    </td>
+                </tr>
+                recordNumber++;
+            }
+        </tbody>
+    </table>
+</div>

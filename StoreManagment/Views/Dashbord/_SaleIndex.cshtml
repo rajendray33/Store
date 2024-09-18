@@ -1,0 +1,72 @@
+﻿@model StoreManagment.ViewModel.CustomerVm
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-9">
+            @*<button type="button" class="btn btn-success">
+            <i class="bi bi-cart4"></i> Add  Customer
+            </button>*@
+        </div>
+
+
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#Salepopup">
+                <i class="bi bi-people-fill"></i> Add Customer
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="Salepopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="PartyModelPopupLabl">Add Customer</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <input asp-for="Customer_Id" id="customerid" value="0" type="hidden" />
+                        <label asp-for="Cust_Name">Customer Name</label>
+                        <input asp-for="Cust_Name" type="text" class="form-control" id="Cust_Name" placeholder="Customer Name" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label asp-for="Cust_Mobile_No">Phone Number</label>
+                        <input asp-for="Cust_Mobile_No" type="number" class="form-control" id="Cust_MobileNo" placeholder="Phone Number" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label asp-for="Cust_Email">Customer Email</label>
+                        <input asp-for="Cust_Email" type="text" class="form-control" id="Cust_Email" placeholder="Customer Email" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label asp-for="Cust_City">City</label>
+                        <input asp-for="Cust_City" type="text" class="form-control" id="Cust_City" placeholder="City" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label asp-for="Cust_Gstin_No">Gstin Number <strong class="text-danger">Optional</strong></label>
+                        <input asp-for="Cust_Gstin_No" type="text" class="form-control" id="Cust_Gstnumber" placeholder="Gstin Number" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4 mb-2">
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-outline-success" id="SaveCustomer">Save</button>
+                </div>
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,5 +1,28 @@
 ﻿@model StoreManagment.ViewModel.Add_ItemVM
+<style>
 
+    #SearchResultShow {
+        width: 100%;
+        margin: 0;
+    }
+
+        #SearchResultShow th {
+            width: 40%;
+        }
+
+        #SearchResultShow td {
+            width: 60%;
+        }
+
+    .border {
+        border: 1px solid #dee2e6;
+    }
+
+    .text-secondary {
+        font-weight: bold;
+    }
+
+</style>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-12">
@@ -7,7 +30,7 @@
                 <div class="text-center mb-4">
                     <h3 class="bg-primary text-white p-2">Item Details</h3>
                 </div>
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="SearchResultShow">
                     @Html.HiddenFor(model => model.ItemId)
                     @Html.HiddenFor(model => model.P_Id)
                     @Html.HiddenFor(model => model.S_P_Id)
@@ -73,26 +96,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .table {
-        width: 100%;
-        margin: 0;
-    }
-
-        .table th {
-            width: 40%;
-        }
-
-        .table td {
-            width: 60%;
-        }
-
-    .border {
-        border: 1px solid #dee2e6;
-    }
-
-    .text-secondary {
-        font-weight: bold;
-    }
-</style>

@@ -19,13 +19,20 @@ namespace StoreManagment.ViewModel
         public int? Item_Price { get; set; }
         [Required]
         public int? Item_Selling_Price { get; set; }
-        [Required]
+
         public DateTime? Item_Expiry_Date { get; set; }
         public string? Image { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
 
-     
+
+
+        // Foreign Key for  Party
+        public string? Gst_No { get; set; }
+        public int Party_Id { get; set; }
+        public string? partyName { get; set; }
+        public PartiesModel? PartiesModel { get; set; }
+
 
         // Foreign Key for Sub Product
         public int S_P_Id { get; set; }

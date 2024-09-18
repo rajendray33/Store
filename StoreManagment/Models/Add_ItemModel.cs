@@ -47,6 +47,17 @@ namespace StoreManagment.Models
 
         [ForeignKey("P_Id")]
         public AddProduct? AddProduct { get; set; }
+
+
+
+        [Column("Gst_No", TypeName = "nvarchar(50)")]
+        public string? Gst_No { get; set; }
+        //Forgin Key for Party
+        public int? PartyId { get; set; }
+
+        [ForeignKey("PartyId")]
+        public PartiesModel? PartiesModel { get; set; }
+
     }
 
 }

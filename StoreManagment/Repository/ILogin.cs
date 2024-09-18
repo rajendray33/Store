@@ -68,5 +68,22 @@ namespace StoreManagment.Repository
         //StockList
         List<Add_ItemVM> Stocklist();
 
+        //Add Parties 
+        string AddParties(PartiesModel model);
+
+        //parties DDlList
+        List<SelectListItem> GetPartiesDDl();
+
+        //GEt Gst No
+        string GetGstNo(int partyid);
+
+        //Get Parties List
+        List<AddPartiesVM> GetPartiesList();
+        //Delete Party
+        bool DeleteParties(int Id);
+
+        //Add Custmore
+        bool AddCustomer(CustomerModel model);
+
     }
 }

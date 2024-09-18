@@ -34,6 +34,10 @@ namespace StoreManagment.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("CreatedDate");
 
+                    b.Property<string>("Gst_No")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Gst_No");
+
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("Image");
@@ -65,6 +69,9 @@ namespace StoreManagment.Migrations
                     b.Property<int?>("P_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PartyId")
+                        .HasColumnType("int");
+
                     b.Property<int>("S_P_Id")
                         .HasColumnType("int");
 
@@ -75,6 +82,8 @@ namespace StoreManagment.Migrations
                     b.HasKey("ItemId");
 
                     b.HasIndex("P_Id");
+
+                    b.HasIndex("PartyId");
 
                     b.HasIndex("S_P_Id");
 
@@ -136,6 +145,89 @@ namespace StoreManagment.Migrations
                     b.ToTable("Tbl_Add_Product");
                 });
 
+            modelBuilder.Entity("StoreManagment.Models.CustomerModel", b =>
+                {
+                    b.Property<int>("Customer_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Customer_Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Created_Date")
+                        .HasColumnType("datetime")
+                        .HasColumnName("Created_Date");
+
+                    b.Property<string>("Cust_City")
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("Cust_City");
+
+                    b.Property<string>("Cust_Email")
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("Cust_Email");
+
+                    b.Property<string>("Cust_Gstin_No")
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("Cust_Gstin_No");
+
+                    b.Property<long?>("Cust_Mobile_No")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Cust_Name")
+                        .HasColumnType("varchar(60)")
+                        .HasColumnName("Cust_Name");
+
+                    b.Property<DateTime?>("Updated_Date")
+                        .HasColumnType("datetime")
+                        .HasColumnName("Updated_Date");
+
+                    b.HasKey("Customer_Id");
+
+                    b.ToTable("Tbl_Customer");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.PartiesModel", b =>
+                {
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PartyId"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("Address");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("Email");
+
+                    b.Property<string>("GstNo")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("GstNo");
+
+                    b.Property<string>("PartyName")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("PartyName");
+
+                    b.Property<long?>("PhoneNo")
+                        .HasColumnType("bigint")
+                        .HasColumnName("PhoneNo");
+
+                    b.Property<string>("StoreName")
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("StoreName");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("PartyId");
+
+                    b.ToTable("Tbl_AddParties");
+                });
+
             modelBuilder.Entity("StoreManagment.Models.RegistrationModel", b =>
                 {
                     b.Property<int>("UserId")
@@ -182,6 +274,10 @@ namespace StoreManagment.Migrations
                         .WithMany("AddItems")
                         .HasForeignKey("P_Id");
 
+                    b.HasOne("StoreManagment.Models.PartiesModel", "PartiesModel")
+                        .WithMany("AddItems")
+                        .HasForeignKey("PartyId");
+
                     b.HasOne("StoreManagment.Models.Add_Sub_ProductModel", "Add_Sub_ProductModel")
                         .WithMany("AddItems")
                         .HasForeignKey("S_P_Id")
@@ -191,6 +287,8 @@ namespace StoreManagment.Migrations
                     b.Navigation("AddProduct");
 
                     b.Navigation("Add_Sub_ProductModel");
+
+                    b.Navigation("PartiesModel");
                 });
 
             modelBuilder.Entity("StoreManagment.Models.Add_Sub_ProductModel", b =>
@@ -214,6 +312,11 @@ namespace StoreManagment.Migrations
                     b.Navigation("AddItems");
 
                     b.Navigation("SubProducts");
+                });
+
+            modelBuilder.Entity("StoreManagment.Models.PartiesModel", b =>
+                {
+                    b.Navigation("AddItems");
                 });
 #pragma warning restore 612, 618
         }

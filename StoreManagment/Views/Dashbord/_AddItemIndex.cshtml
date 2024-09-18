@@ -15,10 +15,7 @@
             </button>
         </div>
         <div class="col-lg-2">
-            <button type="button" class="btn btn-success" id="ViewStockList"><i class="bi bi-card-list"></i> View Stock</button>
         </div>
-
-
         <div class="col-lg-6">
         </div>
     </div>
@@ -35,88 +32,108 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="box bg-light p-3">
+                        <div class="mt-3" style="background-color:whitesmoke;padding-bottom:35px;">
+                            <div class="col-lg-12">
                                 <div class="row">
                                     <div class="col-lg-6">
-                                        @*Category Colum*@
-                                        <label asp-for="P_Id">Category</label>
-                                        <select class="form-control" id="ItmSelectCateAdd">
-                                            <option>--Select Category--</option>>
+                                        @*Party Colum*@
+                                        <label asp-for="partyName">Party</label>
+                                        <select class="form-control" id="ItmSelectParty">
+                                            <option>--Select Party--</option>
                                         </select>
                                     </div>
 
-                                    @*Sub Product Colum*@
+                                    @*Gst Colum*@
                                     <div class="col-lg-6">
-                                        <label asp-for="S_P_Id">Sub Product</label>
-                                        <select class="form-control" id="ItmSelectSub">
-                                            <option>--Select Sub Product--</option>>
-                                        </select>
+                                        <label asp-for="Gst_No">Gst No.</label>
+                                        <input type="text" value="" id="ItmSelectGstNo" class="form-control" readonly />
                                     </div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <label asp-for="Item_Name">Item Name</label>
-                                        <input asp-for="Item_Name" type="text" class="form-control" id="ItmName" placeholder="Item Name" />
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <label asp-for="Item_SerialNumber">Item Serial Number</label>
-                                        <input asp-for="Item_SerialNumber" type="text" class="form-control" id="ItmSrNumber" placeholder="Item Serial Number" />
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <label asp-for="Item_Quantity">Item Quntity</label>
-                                        <input asp-for="Item_Quantity" type="number" class="form-control" id="ItmQuntity" placeholder="Item Quntity" />
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="hidden" value="0" id="ItmIdEditValue" />
+                                    @*Category Colum*@
+                                    <label asp-for="P_Id">Category</label>
+                                    <select class="form-control" id="ItmSelectCateAdd">
+                                        <option>--Select Category--</option>
+                                    </select>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <label asp-for="Item_Price">Item Price</label>
-                                        <input asp-for="Item_Price" type="number" class="form-control" id="ItmPrice" placeholder="Item Price" />
-                                    </div>
+                                @*Sub Product Colum*@
+                                <div class="col-lg-6">
+                                    <label asp-for="S_P_Id">Sub Product</label>
+                                    <select class="form-control" id="ItmSelectSub">
+                                        <option>--Select Sub Product--</option>>
+                                    </select>
+                                </div>
+                            </div>
 
-                                    <div class="col-lg-4">
-                                         <label asp-for="Item_Selling_Price">Item Selling Price</label>
-                                        <input asp-for="Item_Selling_Price" type="number" class="form-control" id="ItmSellingPrice" placeholder="Item Selling Price" />
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <label asp-for="Item_Expiry_Date">Expiry Date</label>
-                                        <input asp-for="Item_Expiry_Date" type="date" class="form-control" id="ItmExpiryDate" placeholder="Expiry Date" />
-                                    </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_Name">Item Name</label>
+                                    <input asp-for="Item_Name" type="text" class="form-control" id="ItmName" placeholder="Item Name" />
                                 </div>
 
-                                <div class="row mt-2">
-                                    <div class="col-lg-8">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <input type="file" id="ItmimageInput" accept="image/*">
-                                            </div>
-                                        </div>
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_SerialNumber">Item Serial Number</label>
+                                    <input asp-for="Item_SerialNumber" type="text" class="form-control" id="ItmSrNumber" placeholder="Item Serial Number" />
+                                </div>
 
-                                        @*Btn Save Item *@
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <button type="button" class="btn btn-outline-success" id="AddItemBtn">Add Item</button>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-lg-4">
-                                        <div id="imagePreview"></div>
-                                    </div>
-
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_Quantity">Item Quntity</label>
+                                    <input asp-for="Item_Quantity" type="number" class="form-control" id="ItmQuntity" placeholder="Item Quntity" />
                                 </div>
                             </div>
                         </div>
+
+                        <div class="mt-3" style="background-color:whitesmoke;padding-bottom:35px;">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_Price">Item Price</label>
+                                    <input asp-for="Item_Price" type="number" class="form-control" id="ItmPrice" placeholder="Item Price" />
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_Selling_Price">Item Selling Price</label>
+                                    <input asp-for="Item_Selling_Price" type="number" class="form-control" id="ItmSellingPrice" placeholder="Item Selling Price" />
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <label asp-for="Item_Expiry_Date">Expiry Date</label>
+                                    <input asp-for="Item_Expiry_Date" type="date" class="form-control" id="ItmExpiryDate" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-lg-8">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="file" id="ItmimageInput" accept="image/*">
+                                    </div>
+                                </div>
+
+                                @*Btn Save Item *@
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <button type="button" class="btn btn-outline-success" id="AddItemBtn">Add Item</button>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div id="imagePreview"></div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
 
@@ -130,7 +147,7 @@
 
 @*Searcj Item PopUp*@
 
-<div class="modal fade" id="SearchItm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<div class="modal fade" id="SearchItm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -182,11 +199,11 @@
 
 </div>
 
-
+@*Stock Item List *@
 <div class="container">
     <div class="row">
         <div class="col-lg-12">
-            @*Stock Item List *@
+
             <div class="row mt-2" id="StockItmTblList"></div>
         </div>
     </div>

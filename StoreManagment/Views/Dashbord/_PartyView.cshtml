@@ -1,0 +1,82 @@
+﻿@model StoreManagment.ViewModel.AddPartiesVM
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-lg-2">
+            <button type="button" class="btn btn-success" id="AddPartyBtn1" data-bs-toggle="modal" data-bs-target="#AddpartyModelPopup">
+                <i class="bi bi-people-fill"></i> Add Party
+            </button>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="AddpartyModelPopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="PartyModelPopupLabl">Add Party</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <input asp-for="PartyId" id="partiesidinput" value="0" type="hidden" />
+                        <label asp-for="PartyName">Party Name</label>
+                        <input asp-for="PartyName" type="text" class="form-control" id="Partyname" placeholder="Party Name" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label asp-for="GstNo">Gst Number</label>
+                        <input asp-for="GstNo" type="text" class="form-control" id="PartyGstNo" placeholder="Gst Number" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label asp-for="PhoneNo">Mobile Number</label>
+                        <input asp-for="PhoneNo" type="number" class="form-control" id="PartyPhoneNo" placeholder="Mobile Number" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" type="text" class="form-control" id="PartyEmail" placeholder="Email" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label asp-for="Address">Address</label>
+                        <input asp-for="Address" type="text" class="form-control" id="PartyAddress" placeholder="Address" />
+                    </div>
+                    <div class="col-lg-6">
+                        <label asp-for="StoreName">Store Name</label>
+                        <input asp-for="StoreName" type="text" class="form-control" id="PartyStoreName" placeholder="Store Name" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4 mb-2">
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-outline-success"  id="SubmitParty">Add Party</button>
+                </div>
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-outline-danger text-black" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@*Shoe Party List Div*@
+<section class="section mt-5">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="PartiesListShow">  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
